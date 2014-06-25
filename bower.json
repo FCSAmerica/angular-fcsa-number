@@ -17,9 +17,13 @@
   "homepage": "https://github.com/FCSAmericaDev/angular-fcsa-number",
   "ignore": [
     "**/.*",
+    "**/*.coffee",
     "node_modules",
     "bower_components",
-    "test"
+    "test",
+    "Gruntfile.coffee",
+    "karma.conf.js",
+    "package.json"
   ],
   "dependencies": {
     "angular": "~1.x"
