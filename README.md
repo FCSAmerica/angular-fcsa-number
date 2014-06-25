@@ -1,6 +1,10 @@
 # FCSA Number
 
-An Angular directive that validates numbers and adds commas as thousands separator.
+An Angular directive that validates numbers and adds commas as thousands separator. 
+
+So when the user enters `1000` into the textbox and tabs out, the value will be formatted to include the thousands separator and will display: `1,000`
+
+If an invalid number is entered in the textbox, the textbox will be invalid with the `fcsaNumber` error.
 
 ## Installation
 
@@ -30,9 +34,6 @@ When an invalid number is entered by the user, the form and control will become 
 
 Without any options passed to it, fcsa-number will validate that the input is a valid number and will also add commas for thousand separators.
 
-So if the user enters `1000` into the textbox and tabs out, then the value will be formatted to include the thousand separators and will display: `1,000`
-
-If a non-number is entered in the textbox, the textbox will be invalid with the `fcsaNumber` error.
 
 #### max
 
