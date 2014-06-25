@@ -4,7 +4,7 @@
   "authors": [
     "Paul Yoder <paulyoder@gmail.com>"
   ],
-  "description": "An Angular directive that validates numbers and adds commas as thousands separator.",
+  "description": "An Angular directive that validates numbers and adds commas for the thousands separator.",
   "main": "src/fcsaNumber.js",
   "keywords": [
     "angular",
