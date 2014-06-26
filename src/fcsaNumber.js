@@ -1,11 +1,15 @@
 (function() {
   angular.module('fcsa-number', []).directive('fcsaNumber', function() {
-    var addCommasToInteger, commasRegex, hasMultipleDecimals, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMaxNumber, makeMinNumber;
+    var addCommasToInteger, commasRegex, controlKeys, hasMultipleDecimals, isNotControlKey, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMaxNumber, makeMinNumber;
     isNumber = function(val) {
       return !isNaN(parseFloat(val)) && isFinite(val);
     };
     isNotDigit = function(which) {
       return which < 45 || which > 57 || which === 47;
+    };
+    controlKeys = [0, 8, 13];
+    isNotControlKey = function(which) {
+      return controlKeys.indexOf(which) === -1;
     };
     hasMultipleDecimals = function(val) {
       return (val != null) && val.toString().split('.').length > 2;
@@ -131,11 +135,13 @@
           target.val(val.replace(commasRegex, ''));
           return target.select();
         });
-        return elem.on('keypress', function(e) {
-          if (isNotDigit(e.which)) {
-            return e.preventDefault();
-          }
-        });
+        if (options.preventInvalidInput === true) {
+          return elem.on('keypress', function(e) {
+            if (isNotDigit(e.which && isNotControlKey(e.which))) {
+              return e.preventDefault();
+            }
+          });
+        }
       }
     };
   });

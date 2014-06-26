@@ -71,6 +71,14 @@ Validates the number does not have more than the specified number of digits.
  * Valid: 76
  * Invalid: 123
 
+#### preventInvalidInput
+
+By default users are allowed to enter invalid characters, and then the textbox is marked invalid. 
+If you want to prevent users from entering invalid characters altogether, then use the `preventInvalidInput` option.
+If the user presses the 'a' key, the directive will catch it and prevent 'a' from being shown in the textbox.
+
+    fcsa-number="{ preventInvalidInput: true }"
+
 ## Developing
 
 Grunt is used to compile the CoffeeScript files and run the tests. To get started run the following commands on the command line:

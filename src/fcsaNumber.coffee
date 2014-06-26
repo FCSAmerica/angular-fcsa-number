@@ -8,6 +8,10 @@ directive 'fcsaNumber', ->
     isNotDigit = (which) ->
         (which < 45 || which > 57 || which is 47)
 
+    controlKeys = [0,8,13] # 0 = tab, 8 = backspace , 13 = enter
+    isNotControlKey = (which) ->
+      controlKeys.indexOf(which) == -1
+
     hasMultipleDecimals = (val) ->
       val? && val.toString().split('.').length > 2
 
@@ -96,6 +100,7 @@ directive 'fcsaNumber', ->
                 target.val val.replace commasRegex, ''
                 target.select()
 
-            elem.on 'keypress', (e) ->
-                e.preventDefault() if isNotDigit e.which
+            if options.preventInvalidInput == true
+              elem.on 'keypress', (e) ->
+                  e.preventDefault() if isNotDigit e.which && isNotControlKey e.which
     }
