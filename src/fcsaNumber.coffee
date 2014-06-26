@@ -95,7 +95,7 @@ directive 'fcsaNumber', ->
                 ngModelCtrl.$render()
 
             elem.on 'focus', (e) ->
-                target = $(e.target)
+                target = angular.element e.target
                 val = target.val()
                 target.val val.replace commasRegex, ''
                 target.select()

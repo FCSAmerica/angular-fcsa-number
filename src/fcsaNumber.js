@@ -130,7 +130,7 @@
         });
         elem.on('focus', function(e) {
           var target, val;
-          target = $(e.target);
+          target = angular.element(e.target);
           val = target.val();
           target.val(val.replace(commasRegex, ''));
           return target.select();

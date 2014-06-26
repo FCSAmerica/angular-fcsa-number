@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+
+ * using `angular.element` instead of `$` and therefore no longer requiring jQuery to be used
+
 ## 1.2
 
  * added 'preventInvalidInput' option
