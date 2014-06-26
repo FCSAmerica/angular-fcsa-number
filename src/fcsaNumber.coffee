@@ -33,14 +33,14 @@ directive 'fcsaNumber', ->
     makeIsValid = (options) ->
         validations = []
         
-        if options.decimals?
-            validations.push makeMaxDecimals options.decimals
+        if options.maxDecimals?
+            validations.push makeMaxDecimals options.maxDecimals
         if options.max?
             validations.push makeMaxNumber options.max
         if options.min?
             validations.push makeMinNumber options.min
-        if options.digits?
-            validations.push makeMaxDigits options.digits
+        if options.maxDigits?
+            validations.push makeMaxDigits options.maxDigits
             
         (val) ->
             return true if val == '-'

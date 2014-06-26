@@ -42,8 +42,8 @@
     makeIsValid = function(options) {
       var validations;
       validations = [];
-      if (options.decimals != null) {
-        validations.push(makeMaxDecimals(options.decimals));
+      if (options.maxDecimals != null) {
+        validations.push(makeMaxDecimals(options.maxDecimals));
       }
       if (options.max != null) {
         validations.push(makeMaxNumber(options.max));
@@ -51,8 +51,8 @@
       if (options.min != null) {
         validations.push(makeMinNumber(options.min));
       }
-      if (options.digits != null) {
-        validations.push(makeMaxDigits(options.digits));
+      if (options.maxDigits != null) {
+        validations.push(makeMaxDigits(options.maxDigits));
       }
       return function(val) {
         var i, number, _i, _ref;

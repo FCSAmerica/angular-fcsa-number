@@ -53,20 +53,20 @@ Validates the number is not below the min number.
  * Valid: -5
  * Invalid: -6
 
-#### decimals
+#### maxDecimals
 
 Validates the number does not have more than the specified number of decimals.
 
-    fcsa-number="{ decimals: 2 }"
+    fcsa-number="{ maxDecimals: 2 }"
 
  * Valid: 1.23
  * Invalid: 1.234
 
-#### digits
+#### maxDigits
 
 Validates the number does not have more than the specified number of digits.
 
-    fcsa-number="{ digits: 2 }"
+    fcsa-number="{ maxDigits: 2 }"
 
  * Valid: 76
  * Invalid: 123

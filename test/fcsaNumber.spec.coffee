@@ -75,34 +75,34 @@ describe 'fcsaNumber', ->
           val: '-0.1'
         expect(valid).toBe false
 
-    describe 'digits', ->
+    describe 'maxDigits', ->
       it 'validates postive numbers not above number of digits', ->
         valid = isValid
-          options: '{ digits: 2 }'
+          options: '{ maxDigits: 2 }'
           val: '99'
         expect(valid).toBe true
 
       it 'invalidates postive numbers above number of digits', ->
         valid = isValid
-          options: '{ digits: 2 }'
+          options: '{ maxDigits: 2 }'
           val: '999'
         expect(valid).toBe false
 
       it 'validates negative numbers not above number of digits', ->
         valid = isValid
-          options: '{ digits: 2 }'
+          options: '{ maxDigits: 2 }'
           val: '-99'
         expect(valid).toBe true
 
-    describe 'decimals', ->
+    describe 'maxDecimals', ->
       it 'validates numbers without more decimals', ->
         valid = isValid
-          options: '{ decimals: 2 }'
+          options: '{ maxDecimals: 2 }'
           val: '1.23'
         expect(valid).toBe true
 
       it 'invalidates numbers with more decimals', ->
         valid = isValid
-          options: '{ decimals: 2 }'
+          options: '{ maxDecimals: 2 }'
           val: '1.234'
         expect(valid).toBe false

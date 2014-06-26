@@ -101,11 +101,11 @@
           return expect(valid).toBe(false);
         });
       });
-      describe('digits', function() {
+      describe('maxDigits', function() {
         it('validates postive numbers not above number of digits', function() {
           var valid;
           valid = isValid({
-            options: '{ digits: 2 }',
+            options: '{ maxDigits: 2 }',
             val: '99'
           });
           return expect(valid).toBe(true);
@@ -113,7 +113,7 @@
         it('invalidates postive numbers above number of digits', function() {
           var valid;
           valid = isValid({
-            options: '{ digits: 2 }',
+            options: '{ maxDigits: 2 }',
             val: '999'
           });
           return expect(valid).toBe(false);
@@ -121,17 +121,17 @@
         return it('validates negative numbers not above number of digits', function() {
           var valid;
           valid = isValid({
-            options: '{ digits: 2 }',
+            options: '{ maxDigits: 2 }',
             val: '-99'
           });
           return expect(valid).toBe(true);
         });
       });
-      return describe('decimals', function() {
+      return describe('maxDecimals', function() {
         it('validates numbers without more decimals', function() {
           var valid;
           valid = isValid({
-            options: '{ decimals: 2 }',
+            options: '{ maxDecimals: 2 }',
             val: '1.23'
           });
           return expect(valid).toBe(true);
@@ -139,7 +139,7 @@
         return it('invalidates numbers with more decimals', function() {
           var valid;
           valid = isValid({
-            options: '{ decimals: 2 }',
+            options: '{ maxDecimals: 2 }',
             val: '1.234'
           });
           return expect(valid).toBe(false);
