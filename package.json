@@ -16,7 +16,10 @@
     "grunt-contrib-uglify": "~0.2.5",
     "grunt-contrib-coffee": "~0.7.0",
     "grunt-contrib-watch": "~0.5.3",
-    "express": "3.x"
+    "grunt-contrib-copy": "~0.5",
+    "express": "~4.x",
+    "grunt-express-server": "~0.4.17",
+    "grunt-shell": "~0.7.0"
   },
   "scripts": {
     "test": "grunt --verbose"

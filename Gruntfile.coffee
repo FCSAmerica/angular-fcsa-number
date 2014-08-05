@@ -8,6 +8,7 @@ module.exports = (grunt) ->
         files:
           'src/fcsaNumber.js': 'src/fcsaNumber.coffee'
           'test/fcsaNumber.spec.js': 'test/fcsaNumber.spec.coffee'
+          'e2e/fcsaNumber.e2e.js': 'e2e/fcsaNumber.e2e.coffee'
     pkg: grunt.file.readJSON('package.json')
     uglify:
       options:
@@ -15,12 +16,31 @@ module.exports = (grunt) ->
       build:
         src: 'src/fcsaNumber.js'
         dest: 'src/fcsaNumber.min.js'
+    copy:
+      web_angular:
+        src: 'bower_components/angular/angular.js'
+        dest: 'e2e/web/public/angular.js'
+      web_fcsaNumber:
+        src: 'src/fcsaNumber.js'
+        dest: 'e2e/web/public/fcsaNumber.js'
+    express:
+      dev:
+        options:
+          script: 'e2e/web/app.js'
+          nospawn: true
+          delay: 5
+    shell:
+      protractor:
+        options:
+          stdout: true
+        command: 'protractor e2e/protractor.config'
     watch:
       files: [
         'src/fcsaNumber.coffee'
         'test/fcsaNumber.spec.coffee'
+        'e2e/fcsaNumber.e2e.coffee'
       ]
-      tasks: 'default'
+      tasks: 'e2e'
       karma:
         files: ['src/fcsaNumber.js', 'test/fcsaNumber.spec.js']
         tasks: ['karma:unit:run']
@@ -36,4 +56,5 @@ module.exports = (grunt) ->
 
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks)
 
-  grunt.registerTask 'default', ['coffee', 'uglify']
+  grunt.registerTask 'default', ['coffee', 'uglify', 'copy:web_angular', 'copy:web_fcsaNumber']
+  grunt.registerTask 'e2e', ['default', 'express', 'shell:protractor']

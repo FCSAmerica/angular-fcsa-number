@@ -89,16 +89,10 @@ Grunt is used to compile the CoffeeScript files and run the tests. To get starte
     // installs the required bower components
     bower install
 
-Before you start Grunt, you need to have Karma startup an instance of the Chrome browser to be used in the unit tests.
+Run the following command to automatically compile and run the unit and end to end tests whenever you make a change to a file.
 
-From the command line run:
+    grunt karma:unit:start express:dev watch
 
-    node_modules/karma/bin/karma start
+To just run the protractor tests, you can run the following command.
 
-Then you can start Grunt to perform the compilation and unit tests:
-
-In another terminal window run:
-
-    grunt watch
-
-And now the code will be compiled and the tests will be ran anytime you save changes to the files.
+    grunt express:dev e2e
