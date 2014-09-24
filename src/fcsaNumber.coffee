@@ -72,9 +72,10 @@ directive 'fcsaNumber', ->
             isValid = makeIsValid options
 
             ngModelCtrl.$parsers.unshift (viewVal) ->
-                if isValid(viewVal) || !viewVal
+                noCommasVal = viewVal.replace(/,/g, '');
+                if isValid(noCommasVal) || !noCommasVal
                     ngModelCtrl.$setValidity 'fcsaNumber', true
-                    return viewVal
+                    return noCommasVal
                 else
                     ngModelCtrl.$setValidity 'fcsaNumber', false
                     return undefined

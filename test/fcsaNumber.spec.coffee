@@ -28,6 +28,11 @@ describe 'fcsaNumber', ->
         val: '1'
       expect(valid).toBe true
 
+    it 'validates positive number with commas', ->
+      valid = isValid
+        val: '1,23'
+      expect(valid).toBe true
+
     it 'validates negative number', ->
       valid = isValid
         val: '-1'
@@ -36,6 +41,16 @@ describe 'fcsaNumber', ->
     it 'validates number with decimals', ->
       valid = isValid
         val: '1.1'
+      expect(valid).toBe true
+
+    it 'validates number with decimals and commas', ->
+      valid = isValid
+        val: '1,123,142.1'
+      expect(valid).toBe true
+
+    it 'validates number while ignoring extra commas', ->
+      valid = isValid
+        val: '1,1,23,1,4,2.1'
       expect(valid).toBe true
 
     it 'invalidates number with multiple decimals', ->
@@ -76,13 +91,13 @@ describe 'fcsaNumber', ->
         expect(valid).toBe false
 
     describe 'maxDigits', ->
-      it 'validates postive numbers not above number of digits', ->
+      it 'validates positive numbers not above number of digits', ->
         valid = isValid
           options: '{ maxDigits: 2 }'
           val: '99'
         expect(valid).toBe true
 
-      it 'invalidates postive numbers above number of digits', ->
+      it 'invalidates positive numbers above number of digits', ->
         valid = isValid
           options: '{ maxDigits: 2 }'
           val: '999'
