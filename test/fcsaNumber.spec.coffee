@@ -70,6 +70,11 @@ describe 'fcsaNumber', ->
         val: '-1'
       expect(valid).toBe true
 
+    it 'invalidates hyphen only', ->
+      valid = isValid
+        val: '-'
+      expect(valid).toBe false
+
     it 'validates number with decimals', ->
       valid = isValid
         val: '1.1'

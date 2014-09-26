@@ -47,7 +47,6 @@ directive 'fcsaNumber', ->
             validations.push makeMaxDigits options.maxDigits
             
         (val) ->
-            return true if val == '-'
             return false unless isNumber val
             return false if hasMultipleDecimals val
             number = Number val

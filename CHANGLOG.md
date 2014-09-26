@@ -5,6 +5,7 @@
 * Enhancements
   * Not adding commas to the decimal portion of the number
   * Allowing commas to be entered by the user. Thanks @jbulat
+  * A hyphen only value is marked invalid
 
 ### 1.2.1
 

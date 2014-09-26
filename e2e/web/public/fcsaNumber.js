@@ -60,9 +60,6 @@
       }
       return function(val) {
         var i, number, _i, _ref;
-        if (val === '-') {
-          return true;
-        }
         if (!isNumber(val)) {
           return false;
         }

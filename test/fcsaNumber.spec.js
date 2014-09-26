@@ -87,6 +87,13 @@
         });
         return expect(valid).toBe(true);
       });
+      it('invalidates hyphen only', function() {
+        var valid;
+        valid = isValid({
+          val: '-'
+        });
+        return expect(valid).toBe(false);
+      });
       it('validates number with decimals', function() {
         var valid;
         valid = isValid({
