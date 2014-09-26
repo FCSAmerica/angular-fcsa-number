@@ -40,7 +40,7 @@
       });
     });
     describe('on blur', function() {
-      return it('adds commas', function() {
+      it('adds commas', function() {
         var el;
         $scope.model.number = 1000;
         el = $compile("<input type='text' name='number' ng-model='model.number' fcsa-number />")($scope);
@@ -50,6 +50,19 @@
         angular.element(el).triggerHandler('focus');
         angular.element(el).triggerHandler('blur');
         return expect(el.value).toBe('1,000');
+      });
+      return describe('when more than 3 decimals', function() {
+        return it('does not add commas to the decimals', function() {
+          var el;
+          $scope.model.number = 1234.5678;
+          el = $compile("<input type='text' name='number' ng-model='model.number' fcsa-number />")($scope);
+          el = el[0];
+          $scope.$digest();
+          angular.element(document.body).append(el);
+          angular.element(el).triggerHandler('focus');
+          angular.element(el).triggerHandler('blur');
+          return expect(el.value).toBe('1,234.5678');
+        });
       });
     });
     describe('no options', function() {

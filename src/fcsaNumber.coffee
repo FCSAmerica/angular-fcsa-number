@@ -57,7 +57,10 @@ directive 'fcsaNumber', ->
         
     commasRegex = /,/g
     addCommasToInteger = (val) ->
-        val.toString().replace /(\d)(?=(\d{3})+(?!\d))/g, '$1,'
+        decimals = `val.indexOf('.') == -1 ? '' : val.replace(/^\d+(?=\.)/, '')`
+        wholeNumbers = val.replace /(\.\d+)$/, ''
+        commas = wholeNumbers.replace /(\d)(?=(\d{3})+(?!\d))/g, '$1,'
+        "#{commas}#{decimals}"
 
     {
         restrict: 'A'
@@ -85,7 +88,7 @@ directive 'fcsaNumber', ->
                     return options.nullDisplay
                 return val if !val? || !isValid val
                 ngModelCtrl.$setValidity 'fcsaNumber', true
-                addCommasToInteger val
+                addCommasToInteger val.toString()
 
             elem.on 'blur', ->
                 viewValue = ngModelCtrl.$modelValue
@@ -95,11 +98,10 @@ directive 'fcsaNumber', ->
                 ngModelCtrl.$viewValue = viewValue
                 ngModelCtrl.$render()
 
-            elem.on 'focus', (e) ->
-                target = angular.element e.target
-                val = target.val()
-                target.val val.replace commasRegex, ''
-                target.select()
+            elem.on 'focus', ->
+                val = elem.val()
+                elem.val val.replace commasRegex, ''
+                elem[0].select()
 
             if options.preventInvalidInput == true
               elem.on 'keypress', (e) ->

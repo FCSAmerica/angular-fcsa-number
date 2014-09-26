@@ -80,7 +80,11 @@
     };
     commasRegex = /,/g;
     addCommasToInteger = function(val) {
-      return val.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+      var commas, decimals, wholeNumbers;
+      decimals = val.indexOf('.') == -1 ? '' : val.replace(/^\d+(?=\.)/, '');
+      wholeNumbers = val.replace(/(\.\d+)$/, '');
+      commas = wholeNumbers.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+      return "" + commas + decimals;
     };
     return {
       restrict: 'A',
@@ -114,7 +118,7 @@
             return val;
           }
           ngModelCtrl.$setValidity('fcsaNumber', true);
-          return addCommasToInteger(val);
+          return addCommasToInteger(val.toString());
         });
         elem.on('blur', function() {
           var formatter, viewValue, _i, _len, _ref;
@@ -130,12 +134,11 @@
           ngModelCtrl.$viewValue = viewValue;
           return ngModelCtrl.$render();
         });
-        elem.on('focus', function(e) {
-          var target, val;
-          target = angular.element(e.target);
-          val = target.val();
-          target.val(val.replace(commasRegex, ''));
-          return target.select();
+        elem.on('focus', function() {
+          var val;
+          val = elem.val();
+          elem.val(val.replace(commasRegex, ''));
+          return elem[0].select();
         });
         if (options.preventInvalidInput === true) {
           return elem.on('keypress', function(e) {
