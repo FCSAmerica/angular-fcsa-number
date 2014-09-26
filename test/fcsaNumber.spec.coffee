@@ -158,3 +158,9 @@ describe 'fcsaNumber', ->
           options: '{ maxDecimals: 2 }'
           val: '1.234'
         expect(valid).toBe false
+
+    describe 'prepend', ->
+      it 'prepends the value', ->
+        $scope.model.number = 1000
+        form = compileForm "{ prepend: \"$\" }"
+        expect(form.number.$viewValue).toBe '$1,000'

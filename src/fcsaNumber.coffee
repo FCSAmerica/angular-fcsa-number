@@ -86,7 +86,10 @@ directive 'fcsaNumber', ->
                     return options.nullDisplay
                 return val if !val? || !isValid val
                 ngModelCtrl.$setValidity 'fcsaNumber', true
-                addCommasToInteger val.toString()
+                val = addCommasToInteger val.toString()
+                if options.prepend?
+                  val = "#{options.prepend}#{val}"
+                val
 
             elem.on 'blur', ->
                 viewValue = ngModelCtrl.$modelValue

@@ -114,7 +114,11 @@
             return val;
           }
           ngModelCtrl.$setValidity('fcsaNumber', true);
-          return addCommasToInteger(val.toString());
+          val = addCommasToInteger(val.toString());
+          if (options.prepend != null) {
+            val = "" + options.prepend + val;
+          }
+          return val;
         });
         elem.on('blur', function() {
           var formatter, viewValue, _i, _len, _ref;

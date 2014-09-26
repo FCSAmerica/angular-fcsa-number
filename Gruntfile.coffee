@@ -40,7 +40,7 @@ module.exports = (grunt) ->
         'test/fcsaNumber.spec.coffee'
         'e2e/fcsaNumber.e2e.coffee'
       ]
-      tasks: 'e2e'
+      tasks: 'default'
       karma:
         files: ['src/fcsaNumber.js', 'test/fcsaNumber.spec.js']
         tasks: ['karma:unit:run']

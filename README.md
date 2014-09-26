@@ -79,6 +79,12 @@ If the user presses the 'a' key, the directive will catch it and prevent 'a' fro
 
     fcsa-number="{ preventInvalidInput: true }"
 
+#### prepend
+
+Prepends the specified text before the number.
+
+    fcsa-number="{ prepend: '$' }"
+
 ## Developing
 
 Grunt is used to compile the CoffeeScript files and run the tests. To get started run the following commands on the command line:

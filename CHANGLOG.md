@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.4
+
+* Enhancements
+  * Added `prepend` option
+
 ### 1.3
 
 * Enhancements

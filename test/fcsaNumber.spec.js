@@ -193,7 +193,7 @@
           return expect(valid).toBe(true);
         });
       });
-      return describe('maxDecimals', function() {
+      describe('maxDecimals', function() {
         it('validates numbers without more decimals', function() {
           var valid;
           valid = isValid({
@@ -209,6 +209,13 @@
             val: '1.234'
           });
           return expect(valid).toBe(false);
+        });
+      });
+      return describe('prepend', function() {
+        return it('prepends the value', function() {
+          $scope.model.number = 1000;
+          form = compileForm("{ prepend: \"$\" }");
+          return expect(form.number.$viewValue).toBe('$1,000');
         });
       });
     });
