@@ -27,6 +27,31 @@
       $scope.form.number.$setViewValue(args.val);
       return $scope.form.number.$valid;
     };
+    describe('on focus', function() {
+      return it('removes the commas', function() {
+        var el;
+        $scope.model.number = 1000;
+        el = $compile("<input type='text' name='number' ng-model='model.number' fcsa-number />")($scope);
+        el = el[0];
+        $scope.$digest();
+        angular.element(document.body).append(el);
+        angular.element(el).triggerHandler('focus');
+        return expect(el.value).toBe('1000');
+      });
+    });
+    describe('on blur', function() {
+      return it('adds commas', function() {
+        var el;
+        $scope.model.number = 1000;
+        el = $compile("<input type='text' name='number' ng-model='model.number' fcsa-number />")($scope);
+        el = el[0];
+        $scope.$digest();
+        angular.element(document.body).append(el);
+        angular.element(el).triggerHandler('focus');
+        angular.element(el).triggerHandler('blur');
+        return expect(el.value).toBe('1,000');
+      });
+    });
     describe('no options', function() {
       it('validates positive number', function() {
         var valid;
