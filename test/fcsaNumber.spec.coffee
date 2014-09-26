@@ -164,3 +164,11 @@ describe 'fcsaNumber', ->
         $scope.model.number = 1000
         form = compileForm "{ prepend: \"$\" }"
         expect(form.number.$viewValue).toBe '$1,000'
+        expect($scope.model.number).toBe 1000
+
+    describe 'append', ->
+      it 'appends the value', ->
+        $scope.model.number = 100
+        form = compileForm "{ append: \"%\" }"
+        expect(form.number.$viewValue).toBe '100%'
+        expect($scope.model.number).toBe 100

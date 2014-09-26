@@ -211,11 +211,20 @@
           return expect(valid).toBe(false);
         });
       });
-      return describe('prepend', function() {
+      describe('prepend', function() {
         return it('prepends the value', function() {
           $scope.model.number = 1000;
           form = compileForm("{ prepend: \"$\" }");
-          return expect(form.number.$viewValue).toBe('$1,000');
+          expect(form.number.$viewValue).toBe('$1,000');
+          return expect($scope.model.number).toBe(1000);
+        });
+      });
+      return describe('append', function() {
+        return it('appends the value', function() {
+          $scope.model.number = 100;
+          form = compileForm("{ append: \"%\" }");
+          expect(form.number.$viewValue).toBe('100%');
+          return expect($scope.model.number).toBe(100);
         });
       });
     });

@@ -118,6 +118,9 @@
           if (options.prepend != null) {
             val = "" + options.prepend + val;
           }
+          if (options.append != null) {
+            val = "" + val + options.append;
+          }
           return val;
         });
         elem.on('blur', function() {

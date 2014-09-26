@@ -4,6 +4,7 @@
 
 * Enhancements
   * Added `prepend` option
+  * Added `append` option
 
 ### 1.3
 

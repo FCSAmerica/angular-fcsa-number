@@ -85,6 +85,12 @@ Prepends the specified text before the number.
 
     fcsa-number="{ prepend: '$' }"
 
+### append
+
+Appends the specified text after the number.
+
+    fcsa-number="{ append: '%' }"
+
 ## Developing
 
 Grunt is used to compile the CoffeeScript files and run the tests. To get started run the following commands on the command line:

@@ -89,6 +89,8 @@ directive 'fcsaNumber', ->
                 val = addCommasToInteger val.toString()
                 if options.prepend?
                   val = "#{options.prepend}#{val}"
+                if options.append?
+                  val = "#{val}#{options.append}"
                 val
 
             elem.on 'blur', ->
