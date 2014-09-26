@@ -16,7 +16,7 @@ Then reference `angular-fcsa-number/src/fcsaNumber.js` in your project.
 
 #### Manually
 
-Copy `src/fcsaNumber.js`` into your project and reference it.
+Copy `src/fcsaNumber.js` into your project and reference it.
 
 ## Quick Start
 
@@ -85,11 +85,30 @@ Prepends the specified text before the number.
 
     fcsa-number="{ prepend: '$' }"
 
-### append
+#### append
 
 Appends the specified text after the number.
 
     fcsa-number="{ append: '%' }"
+
+## Default Options
+
+It's possible to set the options globally too. You do this by calling `fcsaNumberConfigProvider.setDefaultOptions()` 
+inside a config function in your app.
+
+Here's a code example that sets the default options:
+
+```javascript
+var app = angular.module('yourApp', ['fcsa-number']);
+app.config(['fcsaNumberConfigProvider', function(fcsaNumberConfigProvider) {
+  fcsaNumberConfigProvider.setDefaultOptions({
+    max: 100,
+    min: 0
+  });
+});
+```
+
+The default options can be overridden locally by passing in an options object: `fcsa-number="{ max: 10 }"`
 
 ## Developing
 

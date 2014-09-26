@@ -1,5 +1,16 @@
-angular.module('fcsa-number', []).
-directive 'fcsaNumber', ->
+fcsaNumberModule = angular.module('fcsa-number', [])
+
+fcsaNumberModule.directive 'fcsaNumber',
+['fcsaNumberConfig', (fcsaNumberConfig) ->
+
+    defaultOptions = fcsaNumberConfig.defaultOptions
+
+    getOptions = (scope) ->
+        options = defaultOptions
+        if scope.options?
+            for own option, value of scope.$eval(scope.options)
+                options[option] = value
+        options
     
     isNumber = (val) ->
         !isNaN(parseFloat(val)) && isFinite(val)
@@ -66,10 +77,7 @@ directive 'fcsaNumber', ->
         scope:
             options: '@fcsaNumber'
         link: (scope, elem, attrs, ngModelCtrl) ->
-            options = {}
-            if scope.options?
-                options = scope.$eval scope.options
-
+            options = getOptions scope
             isValid = makeIsValid options
 
             ngModelCtrl.$parsers.unshift (viewVal) ->
@@ -114,3 +122,15 @@ directive 'fcsaNumber', ->
               elem.on 'keypress', (e) ->
                   e.preventDefault() if isNotDigit e.which && isNotControlKey e.which
     }
+]
+
+fcsaNumberModule.provider 'fcsaNumberConfig', ->
+  _defaultOptions = {}
+
+  @setDefaultOptions = (defaultOptions) ->
+    _defaultOptions = defaultOptions
+
+  @$get = ->
+    defaultOptions: _defaultOptions
+
+  return

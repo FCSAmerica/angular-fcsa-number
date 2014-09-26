@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.5.0
+
+* Enhancements
+  * Can set default options with `fcsaNumberConfigProvider.setDefaultOptions()`
+
 ### 1.4.1
 
 * Bug Fixes
