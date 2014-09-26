@@ -1,6 +1,6 @@
 (function() {
   angular.module('fcsa-number', []).directive('fcsaNumber', function() {
-    var addCommasToInteger, commasRegex, controlKeys, hasMultipleDecimals, isNotControlKey, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMaxNumber, makeMinNumber;
+    var addCommasToInteger, controlKeys, hasMultipleDecimals, isNotControlKey, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMaxNumber, makeMinNumber;
     isNumber = function(val) {
       return !isNaN(parseFloat(val)) && isFinite(val);
     };
@@ -78,7 +78,6 @@
         return true;
       };
     };
-    commasRegex = /,/g;
     addCommasToInteger = function(val) {
       var commas, decimals, wholeNumbers;
       decimals = val.indexOf('.') == -1 ? '' : val.replace(/^\d+(?=\.)/, '');
@@ -137,7 +136,7 @@
         elem.on('focus', function() {
           var val;
           val = elem.val();
-          elem.val(val.replace(commasRegex, ''));
+          elem.val(val.replace(/,/g, ''));
           return elem[0].select();
         });
         if (options.preventInvalidInput === true) {

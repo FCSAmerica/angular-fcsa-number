@@ -18,4 +18,5 @@ describe 'fcsaNumber', ->
     input.clear()
     input.sendKeys '1000\t'
     input.click()
+
     expect(input.getAttribute('value')).toBe '1000'

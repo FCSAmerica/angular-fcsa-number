@@ -55,7 +55,6 @@ directive 'fcsaNumber', ->
                 return false unless validations[i] val, number
             true
         
-    commasRegex = /,/g
     addCommasToInteger = (val) ->
         decimals = `val.indexOf('.') == -1 ? '' : val.replace(/^\d+(?=\.)/, '')`
         wholeNumbers = val.replace /(\.\d+)$/, ''
@@ -75,7 +74,7 @@ directive 'fcsaNumber', ->
             isValid = makeIsValid options
 
             ngModelCtrl.$parsers.unshift (viewVal) ->
-                noCommasVal = viewVal.replace(/,/g, '');
+                noCommasVal = viewVal.replace /,/g, ''
                 if isValid(noCommasVal) || !noCommasVal
                     ngModelCtrl.$setValidity 'fcsaNumber', true
                     return noCommasVal
@@ -100,7 +99,7 @@ directive 'fcsaNumber', ->
 
             elem.on 'focus', ->
                 val = elem.val()
-                elem.val val.replace commasRegex, ''
+                elem.val val.replace /,/g, ''
                 elem[0].select()
 
             if options.preventInvalidInput == true
