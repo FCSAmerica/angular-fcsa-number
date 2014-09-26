@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.4.1
+
+* Bug Fixes
+  * `prepend` and `append` values are removed on focus
+
 ### 1.4
 
 * Enhancements

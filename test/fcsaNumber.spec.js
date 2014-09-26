@@ -212,19 +212,39 @@
         });
       });
       describe('prepend', function() {
-        return it('prepends the value', function() {
+        it('prepends the value', function() {
           $scope.model.number = 1000;
           form = compileForm("{ prepend: \"$\" }");
           expect(form.number.$viewValue).toBe('$1,000');
           return expect($scope.model.number).toBe(1000);
         });
+        return it('removes the prepend value on focus', function() {
+          var el;
+          $scope.model.number = 1000;
+          el = $compile("<input type='text' name='number' ng-model='model.number' fcsa-number='{ prepend: \"$\" }' />")($scope);
+          el = el[0];
+          $scope.$digest();
+          angular.element(document.body).append(el);
+          angular.element(el).triggerHandler('focus');
+          return expect(el.value).toBe('1000');
+        });
       });
       return describe('append', function() {
-        return it('appends the value', function() {
+        it('appends the value', function() {
           $scope.model.number = 100;
           form = compileForm("{ append: \"%\" }");
           expect(form.number.$viewValue).toBe('100%');
           return expect($scope.model.number).toBe(100);
+        });
+        return it('removes the append value on focus', function() {
+          var el;
+          $scope.model.number = 100;
+          el = $compile("<input type='text' name='number' ng-model='model.number' fcsa-number='{ append: \"%\" }' />")($scope);
+          el = el[0];
+          $scope.$digest();
+          angular.element(document.body).append(el);
+          angular.element(el).triggerHandler('focus');
+          return expect(el.value).toBe('100');
         });
       });
     });

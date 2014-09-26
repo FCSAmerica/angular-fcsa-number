@@ -140,6 +140,12 @@
         elem.on('focus', function() {
           var val;
           val = elem.val();
+          if (options.prepend != null) {
+            val = val.replace(options.prepend, '');
+          }
+          if (options.append != null) {
+            val = val.replace(options.append, '');
+          }
           elem.val(val.replace(/,/g, ''));
           return elem[0].select();
         });

@@ -103,6 +103,10 @@ directive 'fcsaNumber', ->
 
             elem.on 'focus', ->
                 val = elem.val()
+                if options.prepend?
+                  val = val.replace options.prepend, ''
+                if options.append?
+                  val = val.replace options.append, ''
                 elem.val val.replace /,/g, ''
                 elem[0].select()
 
