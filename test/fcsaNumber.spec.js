@@ -35,6 +35,13 @@
         });
         return expect(valid).toBe(true);
       });
+      it('validates positive number with commas', function() {
+        var valid;
+        valid = isValid({
+          val: '1,23'
+        });
+        return expect(valid).toBe(true);
+      });
       it('validates negative number', function() {
         var valid;
         valid = isValid({
@@ -46,6 +53,20 @@
         var valid;
         valid = isValid({
           val: '1.1'
+        });
+        return expect(valid).toBe(true);
+      });
+      it('validates number with decimals and commas', function() {
+        var valid;
+        valid = isValid({
+          val: '1,123,142.1'
+        });
+        return expect(valid).toBe(true);
+      });
+      it('validates number while ignoring extra commas', function() {
+        var valid;
+        valid = isValid({
+          val: '1,1,23,1,4,2.1'
         });
         return expect(valid).toBe(true);
       });
@@ -102,7 +123,7 @@
         });
       });
       describe('maxDigits', function() {
-        it('validates postive numbers not above number of digits', function() {
+        it('validates positive numbers not above number of digits', function() {
           var valid;
           valid = isValid({
             options: '{ maxDigits: 2 }',
@@ -110,7 +131,7 @@
           });
           return expect(valid).toBe(true);
         });
-        it('invalidates postive numbers above number of digits', function() {
+        it('invalidates positive numbers above number of digits', function() {
           var valid;
           valid = isValid({
             options: '{ maxDigits: 2 }',
