@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.5.2
+
+* Bug Fixes
+  * `preventInvalidInput` is correctly working again
+
 ### 1.5.1
 
 * Bug Fixes

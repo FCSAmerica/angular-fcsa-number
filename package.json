@@ -1,6 +1,6 @@
 {
   "name": "angular-fcsa-number",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "An Angular directive that validates numbers and adds commas for the thousands separator.",
   "author": "https://github.com/FCSAmericaDev/fcsa-number/graphs/contributors",
   "license": "MIT",

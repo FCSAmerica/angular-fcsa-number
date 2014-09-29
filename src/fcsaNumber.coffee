@@ -15,9 +15,9 @@ fcsaNumberModule.directive 'fcsaNumber',
     isNumber = (val) ->
         !isNaN(parseFloat(val)) && isFinite(val)
 
-    # 45 is '-', 57 is '9' and 47 is '/'
+    # 44 is ',', 45 is '-', 57 is '9' and 47 is '/'
     isNotDigit = (which) ->
-        (which < 45 || which > 57 || which is 47)
+        (which < 44 || which > 57 || which is 47)
 
     controlKeys = [0,8,13] # 0 = tab, 8 = backspace , 13 = enter
     isNotControlKey = (which) ->
@@ -120,7 +120,7 @@ fcsaNumberModule.directive 'fcsaNumber',
 
             if options.preventInvalidInput == true
               elem.on 'keypress', (e) ->
-                  e.preventDefault() if isNotDigit e.which && isNotControlKey e.which
+                e.preventDefault() if isNotDigit(e.which) && isNotControlKey(e.which)
     }
 ]
 

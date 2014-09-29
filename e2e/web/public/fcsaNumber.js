@@ -25,7 +25,7 @@
         return !isNaN(parseFloat(val)) && isFinite(val);
       };
       isNotDigit = function(which) {
-        return which < 45 || which > 57 || which === 47;
+        return which < 44 || which > 57 || which === 47;
       };
       controlKeys = [0, 8, 13];
       isNotControlKey = function(which) {
@@ -168,7 +168,7 @@
           });
           if (options.preventInvalidInput === true) {
             return elem.on('keypress', function(e) {
-              if (isNotDigit(e.which && isNotControlKey(e.which))) {
+              if (isNotDigit(e.which) && isNotControlKey(e.which)) {
                 return e.preventDefault();
               }
             });
