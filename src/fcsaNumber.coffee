@@ -6,7 +6,7 @@ fcsaNumberModule.directive 'fcsaNumber',
     defaultOptions = fcsaNumberConfig.defaultOptions
 
     getOptions = (scope) ->
-        options = defaultOptions
+        options = angular.copy defaultOptions
         if scope.options?
             for own option, value of scope.$eval(scope.options)
                 options[option] = value

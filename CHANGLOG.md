@@ -1,5 +1,11 @@
 # Changelog
 
+### 1.5.1
+
+* Bug Fixes
+  * Fixed issue where overriding a global option on a specific input element would override that 
+  option for all input elements
+
 ### 1.5.0
 
 * Enhancements

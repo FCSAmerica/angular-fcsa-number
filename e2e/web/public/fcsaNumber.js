@@ -10,7 +10,7 @@
       defaultOptions = fcsaNumberConfig.defaultOptions;
       getOptions = function(scope) {
         var option, options, value, _ref;
-        options = defaultOptions;
+        options = angular.copy(defaultOptions);
         if (scope.options != null) {
           _ref = scope.$eval(scope.options);
           for (option in _ref) {
