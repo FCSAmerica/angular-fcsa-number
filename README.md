@@ -91,6 +91,44 @@ Appends the specified text after the number.
 
     fcsa-number="{ append: '%' }"
 
+#### thousandsSeparator
+
+Allows you to override the default thousandsSeparator (the default is a comma). If you override `thousandsSeparator`, then you 
+will probably want to override the `decimalMark` option as well.
+
+    fcsa-number="{ thousandsSeparator: '.', decimalMark: ',' }"
+
+And because it's most likely this option will be applied to all input boxes, then you can set it once using `fcsaNumberConfigProvider`
+
+```javascript
+var app = angular.module('yourApp', ['fcsa-number']);
+app.config(['fcsaNumberConfigProvider', function(fcsaNumberConfigProvider) {
+  fcsaNumberConfigProvider.setDefaultOptions({
+    thousandsSeparator: '.',
+    decimalMark: ','
+  });
+});
+```
+
+#### decimalMark
+
+Allows you to override the default decimalMark (the default is a decimal). If you override `decimalMark`, then you 
+will probably want to override the `thousandsSeparator` option as well.
+
+    fcsa-number="{ decimalMark: ',', thousandsSeparator: '.' }"
+
+And because it's most likely this option will be applied to all input boxes, then you can set it once using `fcsaNumberConfigProvider`
+
+```javascript
+var app = angular.module('yourApp', ['fcsa-number']);
+app.config(['fcsaNumberConfigProvider', function(fcsaNumberConfigProvider) {
+  fcsaNumberConfigProvider.setDefaultOptions({
+    thousandsSeparator: '.',
+    decimalMark: ','
+  });
+});
+```
+
 ## Default Options
 
 It's possible to set the options globally too. You do this by calling `fcsaNumberConfigProvider.setDefaultOptions()` 

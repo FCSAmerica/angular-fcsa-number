@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.6.0
+
+* Enhancements
+  * Added `thousandsSeparator` and `decimalMark` options
+
 ### 1.5.2
 
 * Bug Fixes
