@@ -190,3 +190,14 @@ describe 'fcsaNumber', ->
         angular.element(document.body).append el
         angular.element(el).triggerHandler 'focus'
         expect(el.value).toBe '100'
+
+    describe 'thousandsSeparator and decimalMark', ->
+      xit 'adds them on blur', ->
+        $scope.model.number = 1000.01
+        el = $compile("<input type='text' name='number' ng-model='model.number' fcsa-number='{ thousandsSeparator: \".\", decimalMark: \",\" }' />")($scope)
+        el = el[0]
+        $scope.$digest()
+        angular.element(document.body).append el
+        angular.element(el).triggerHandler 'focus'
+        angular.element(el).triggerHandler 'blur'
+        expect(el.value).toBe '1.000,00'

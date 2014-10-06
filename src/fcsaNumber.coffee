@@ -10,6 +10,10 @@ fcsaNumberModule.directive 'fcsaNumber',
         if scope.options?
             for own option, value of scope.$eval(scope.options)
                 options[option] = value
+                if option == 'thousandsSeparator'
+                  options.thousandsSeparatorRegexp = new RegExp(value, 'g')
+                if option == 'decimalMark'
+                  options.decimalMarkRegexp = new RegExp(value, 'g')
         options
     
     isNumber = (val) ->
@@ -26,9 +30,15 @@ fcsaNumberModule.directive 'fcsaNumber',
     hasMultipleDecimals = (val) ->
       val? && val.toString().split('.').length > 2
 
-    makeMaxDecimals = (maxDecimals) ->
+    decimalMarkToRegexString = (options) ->
+      return '\.' if options.decimalMark == '.'
+      options.decimalMark
+
+    makeMaxDecimals = (maxDecimals, options) ->
+        decimalMark = decimalMarkToRegexString options
+
         if maxDecimals > 0
-            regexString = "^-?\\d*\\.?\\d{0,#{maxDecimals}}$"
+            regexString = "^-?\\d*#{decimalMark}?\\d{0,#{maxDecimals}}$"
         else
             regexString = "^-?\\d*$"
         validRegex = new RegExp regexString
@@ -49,7 +59,7 @@ fcsaNumberModule.directive 'fcsaNumber',
         validations = []
         
         if options.maxDecimals?
-            validations.push makeMaxDecimals options.maxDecimals
+            validations.push makeMaxDecimals options.maxDecimals, options
         if options.max?
             validations.push makeMaxNumber options.max
         if options.min?
@@ -64,8 +74,11 @@ fcsaNumberModule.directive 'fcsaNumber',
             for i in [0...validations.length]
                 return false unless validations[i] val, number
             true
+
+    removeThousandsSeparator = (val, options) ->
+        val.replace options.thousandsSeparatorRegex, ''
         
-    addCommasToInteger = (val) ->
+    addThousandsSeparatorToInteger = (val, options) ->
         decimals = `val.indexOf('.') == -1 ? '' : val.replace(/^\d+(?=\.)/, '')`
         wholeNumbers = val.replace /(\.\d+)$/, ''
         commas = wholeNumbers.replace /(\d)(?=(\d{3})+(?!\d))/g, '$1,'
@@ -81,10 +94,10 @@ fcsaNumberModule.directive 'fcsaNumber',
             isValid = makeIsValid options
 
             ngModelCtrl.$parsers.unshift (viewVal) ->
-                noCommasVal = viewVal.replace /,/g, ''
-                if isValid(noCommasVal) || !noCommasVal
+                viewVal = removeThousandsSeparator viewVal, options
+                if isValid(viewVal) || !viewVal
                     ngModelCtrl.$setValidity 'fcsaNumber', true
-                    return noCommasVal
+                    return viewVal
                 else
                     ngModelCtrl.$setValidity 'fcsaNumber', false
                     return undefined
@@ -94,7 +107,7 @@ fcsaNumberModule.directive 'fcsaNumber',
                     return options.nullDisplay
                 return val if !val? || !isValid val
                 ngModelCtrl.$setValidity 'fcsaNumber', true
-                val = addCommasToInteger val.toString()
+                val = addThousandsSeparatorToInteger val.toString(), options
                 if options.prepend?
                   val = "#{options.prepend}#{val}"
                 if options.append?
@@ -115,7 +128,7 @@ fcsaNumberModule.directive 'fcsaNumber',
                   val = val.replace options.prepend, ''
                 if options.append?
                   val = val.replace options.append, ''
-                elem.val val.replace /,/g, ''
+                elem.val removeThousandsSeparator(val, options)
                 elem[0].select()
 
             if options.preventInvalidInput == true
@@ -125,7 +138,11 @@ fcsaNumberModule.directive 'fcsaNumber',
 ]
 
 fcsaNumberModule.provider 'fcsaNumberConfig', ->
-  _defaultOptions = {}
+  _defaultOptions =
+    thousandsSeparator: ','
+    thousandsSeparatorRegex: new RegExp(',', 'g')
+    decimalMark: '.'
+    decimalMarkRegex: new RegExp('.', 'g')
 
   @setDefaultOptions = (defaultOptions) ->
     _defaultOptions = defaultOptions

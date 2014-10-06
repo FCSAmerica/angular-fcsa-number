@@ -229,7 +229,7 @@
           return expect(el.value).toBe('1000');
         });
       });
-      return describe('append', function() {
+      describe('append', function() {
         it('appends the value', function() {
           $scope.model.number = 100;
           form = compileForm("{ append: \"%\" }");
@@ -245,6 +245,19 @@
           angular.element(document.body).append(el);
           angular.element(el).triggerHandler('focus');
           return expect(el.value).toBe('100');
+        });
+      });
+      return describe('thousandsSeparator and decimalMark', function() {
+        return xit('adds them on blur', function() {
+          var el;
+          $scope.model.number = 1000.01;
+          el = $compile("<input type='text' name='number' ng-model='model.number' fcsa-number='{ thousandsSeparator: \".\", decimalMark: \",\" }' />")($scope);
+          el = el[0];
+          $scope.$digest();
+          angular.element(document.body).append(el);
+          angular.element(el).triggerHandler('focus');
+          angular.element(el).triggerHandler('blur');
+          return expect(el.value).toBe('1.000,00');
         });
       });
     });
