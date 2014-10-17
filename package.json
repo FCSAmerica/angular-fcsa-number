@@ -1,6 +1,6 @@
 {
   "name": "angular-fcsa-number",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "An Angular directive that validates numbers and adds commas for the thousands separator.",
   "author": "https://github.com/FCSAmericaDev/fcsa-number/graphs/contributors",
   "license": "MIT",
@@ -19,7 +19,8 @@
     "grunt-contrib-copy": "~0.5",
     "express": "~4.x",
     "grunt-express-server": "~0.4.17",
-    "grunt-shell": "~0.7.0"
+    "grunt-shell": "~0.7.0",
+    "grunt-file-append": "0.0.5"
   },
   "scripts": {
     "test": "grunt --verbose"

@@ -66,7 +66,7 @@ fcsaNumberModule.directive 'fcsaNumber',
             true
         
     addCommasToInteger = (val) ->
-        decimals = `val.indexOf('.') == -1 ? '' : val.replace(/^\d+(?=\.)/, '')`
+        decimals = `val.indexOf('.') == -1 ? '' : val.replace(/^-?\d+(?=\.)/, '')`
         wholeNumbers = val.replace /(\.\d+)$/, ''
         commas = wholeNumbers.replace /(\d)(?=(\d{3})+(?!\d))/g, '$1,'
         "#{commas}#{decimals}"

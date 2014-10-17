@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.5.3
+
+* Bug Fixes
+  * Fixed a bug where `-1.2` was being formatted as `-1-1.2`
+
 ### 1.5.2
 
 * Bug Fixes

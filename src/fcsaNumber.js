@@ -1,3 +1,4 @@
+/*! angular-fcsa-number (version 1.5.3) 2014-10-17 */
 (function() {
   var fcsaNumberModule,
     __hasProp = {}.hasOwnProperty;
@@ -97,7 +98,7 @@
       };
       addCommasToInteger = function(val) {
         var commas, decimals, wholeNumbers;
-        decimals = val.indexOf('.') == -1 ? '' : val.replace(/^\d+(?=\.)/, '');
+        decimals = val.indexOf('.') == -1 ? '' : val.replace(/^-?\d+(?=\.)/, '');
         wholeNumbers = val.replace(/(\.\d+)$/, '');
         commas = wholeNumbers.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
         return "" + commas + decimals;

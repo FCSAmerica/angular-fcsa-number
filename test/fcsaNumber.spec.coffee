@@ -43,6 +43,17 @@ describe 'fcsaNumber', ->
       angular.element(el).triggerHandler 'blur'
       expect(el.value).toBe '1,000'
 
+    describe 'with negative decimal number', ->
+      it 'correctly formats it', ->
+        $scope.model.number = -1000.2
+        el = $compile("<input type='text' name='number' ng-model='model.number' fcsa-number />")($scope)
+        el = el[0]
+        $scope.$digest()
+        angular.element(document.body).append el
+        angular.element(el).triggerHandler 'focus'
+        angular.element(el).triggerHandler 'blur'
+        expect(el.value).toBe '-1,000.2'
+
     describe 'when more than 3 decimals', ->
       it 'does not add commas to the decimals', ->
         $scope.model.number = 1234.5678

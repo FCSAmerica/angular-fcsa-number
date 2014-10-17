@@ -17,6 +17,11 @@ module.exports = (grunt) ->
       build:
         src: 'src/fcsaNumber.js'
         dest: 'src/fcsaNumber.min.js'
+    file_append:
+      default_options:
+        files:
+          'src/fcsaNumber.js':
+            prepend: '/*! <%= pkg.name %> (version <%= pkg.version %>) <%= grunt.template.today("yyyy-mm-dd") %> */\n'
     copy:
       web_angular:
         src: 'bower_components/angular/angular.js'
@@ -62,5 +67,5 @@ module.exports = (grunt) ->
 
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks)
 
-  grunt.registerTask 'default', ['coffee', 'uglify', 'copy:web_angular', 'copy:web_fcsaNumber']
+  grunt.registerTask 'default', ['coffee', 'uglify', 'file_append', 'copy:web_angular', 'copy:web_fcsaNumber']
   grunt.registerTask 'e2e', ['default', 'express', 'shell:protractor']

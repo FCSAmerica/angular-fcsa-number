@@ -51,6 +51,19 @@
         angular.element(el).triggerHandler('blur');
         return expect(el.value).toBe('1,000');
       });
+      describe('with negative decimal number', function() {
+        return it('correctly formats it', function() {
+          var el;
+          $scope.model.number = -1000.2;
+          el = $compile("<input type='text' name='number' ng-model='model.number' fcsa-number />")($scope);
+          el = el[0];
+          $scope.$digest();
+          angular.element(document.body).append(el);
+          angular.element(el).triggerHandler('focus');
+          angular.element(el).triggerHandler('blur');
+          return expect(el.value).toBe('-1,000.2');
+        });
+      });
       return describe('when more than 3 decimals', function() {
         return it('does not add commas to the decimals', function() {
           var el;
