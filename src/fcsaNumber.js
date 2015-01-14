@@ -4,13 +4,62 @@
 
     fcsaNumberModule = angular.module('fcsa-number', []);
 
+    fcsaHelper = fcsaNumberModule.factory('fcsa-helper', [ 'fcsaNumberConfig', function(fcsaNumberConfig) {
+        var FCSAH = {};
+        FCSAH.toNumber = function(val, decSep, thSep) {
+            // this function will parse val char by char
+            // and return Javascript standard notation
+            // for numbers
+            if (!val) {
+                return val;
+            }
+            var valS = val.toString();
+            var len = valS.length;
+            var ret = "";
+            decSep = decSep ? decSep : fcsaNumberConfig.defaultOptions.decimalSeparator;
+            thSep = thSep ? thSep : fcsaNumberConfig.defaultOptions.thousandsSeparator;
+            for (var i = 0; i < len; i++) {
+                var chr = valS[i];
+                if (chr != thSep) {
+                    if (chr == decSep) {
+                        chr = ".";
+                    }
+                    ret += chr;
+                }
+            }
+            // if last is decimal separator - then skip
+            if (ret.indexOf(decSep.decimalSeparator) == ret.length - 1) {
+                ret = ret.substring(0, ret.length - 1);
+            }
+            return ret;
+        }
+        FCSAH.fromNumber = function(val, decSep, thSep) {
+            val = val + ""; // convert to string, if not already
+            var commas, decimals, wholeNumbers;
+            decSep = decSep ? decSep : fcsaNumberConfig.defaultOptions.decimalSeparator;
+            thSep = thSep ? thSep : fcsaNumberConfig.defaultOptions.thousandsSeparator;
+            var decimals = '';
+            // we look for normal decimal separator here
+            var dsi = val.indexOf(".");
+            if (dsi >= 0 && dsi < val.length - 1) {
+                decimals = decSep + (dsi < val.length ? val.substring(dsi + 1) : "");
+            }
+            wholeNumbers = val.replace(new RegExp('(\\.\\d*)$'), '');
+            commas = wholeNumbers.replace(new RegExp('(\\d)(?=(\\d{3})+(?!\\d))', 'g'), '$1' + thSep);
+            var ret = "" + commas + decimals;
+            return ret;
+        }
+        return FCSAH;
+    } ]);
+
     fcsaNumberModule
             .directive(
                     'fcsaNumber',
                     [
                             'fcsaNumberConfig',
-                            function(fcsaNumberConfig) {
-                                var addCommasToInteger, controlKeys, defaultOptions, getOptions, hasMultipleDecimals, isNotControlKey, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMaxNumber, makeMinNumber;
+                            'fcsa-helper',
+                            function(fcsaNumberConfig, fcsaHelper) {
+                                var defaultOptions, getOptions, isNumber, isNotDigit, controlKeys, isNotControlKey, hasMultipleDecimals, makeFormatWithMaxDecimals, makeMaxNumber, makeMinNumber, makeMaxDigits, makeIsValid, addCommasToInteger;
                                 defaultOptions = fcsaNumberConfig.defaultOptions;
                                 getOptions = function(scope) {
                                     var option, options, value, _ref;
@@ -25,36 +74,9 @@
                                     }
                                     return options;
                                 };
-                                toStandard = function(val) {
-                                    // this function will parse val char by char
-                                    // and return Javascript standard notation
-                                    // for numbers
-                                    if (!val) {
-                                        return val;
-                                    }
-                                    var valS = val.toString();
-                                    var len = valS.length;
-                                    var ret = "";
-                                    var opt = getOptions();
-                                    var decSep = opt.decimalSeparator;
-                                    var thSep = opt.thousandsSeparator;
-                                    for (var i = 0; i < len; i++) {
-                                        var chr = valS[i];
-                                        if (chr != thSep) {
-                                            if (chr == decSep) {
-                                                chr = ".";
-                                            }
-                                            ret += chr;
-                                        }
-                                    }
-                                    // if last is decimal separator - then skip
-                                    if (ret.indexOf(opt.decimalSeparator) == ret.length - 1) {
-                                        ret = ret.substring(0, ret.length - 1);
-                                    }
-                                    return ret;
-                                };
                                 isNumber = function(val) {
-                                    var sval = toStandard(val);
+                                    var opt = getOptions();
+                                    var sval = fcsaHelper.toNumber(val, opt.decimalSeparator, opt.thousandsSeparator);
                                     return !isNaN(parseFloat(sval)) && isFinite(sval);
                                 };
                                 isNotDigit = function(which) {
@@ -145,7 +167,10 @@
                                         if (hasMultipleDecimals(val)) {
                                             return false;
                                         }
-                                        number = Number(toStandard(val));
+                                        var opt = getOptions();
+                                        var sval = fcsaHelper.toNumber(val, opt.decimalSeparator,
+                                                opt.thousandsSeparator);
+                                        number = Number(sval);
                                         for (i = _i = 0, _ref = validations.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i
                                                 : --_i) {
                                             if (!validations[i](val, number)) {
@@ -232,7 +257,10 @@
                                             }
                                             if (!options.keepThousandsOnInput) {
                                                 if (val) {
-                                                    val = Number(toStandard(val)).toString();
+                                                    var opt = getOptions();
+                                                    var sval = fcsaHelper.toNumber(val, opt.decimalSeparator,
+                                                            opt.thousandsSeparator);
+                                                    val = Number(sval).toString();
                                                     val = val.replace(
                                                             new RegExp("\\" + options.thousandsSeparator, "g"),
                                                             options.decimalSeparator);
