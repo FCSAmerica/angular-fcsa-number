@@ -260,12 +260,18 @@
         var _defaultOptions;
         whatDecimalSeparator = function() {
             var n = 1.1;
-            n = /^1(.+)1$/.exec(n.toLocaleString().substring(0, 3))[1];
+            n = n.toLocaleString();
+            var regex = new RegExp("^1(.+)1\\d*$");
+            n = n && regex.exec(n);
+            n = n ? n[1] : ".";
             return n;
         }
         whatThousandsSeparator = function() {
             var n = 1111;
-            n = /^1(.+)111$/.exec(n.toLocaleString().substring(0, 5))[1];
+            n = n.toLocaleString();
+            var regex = new RegExp("^1(.+)111(\\" + whatDecimalSeparator() + "\\d*)?$");
+            n = n && regex.exec(n);
+            n = n ? n[1] : ",";
             return n;
         }
         _defaultOptions = {
