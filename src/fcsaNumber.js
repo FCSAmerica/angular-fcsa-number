@@ -80,9 +80,6 @@
                                     validRegex = new RegExp(regexString);
                                     return function(val) {
                                         var ret = validRegex.test(val);
-                                        if (!ret)
-                                            window.console.log('Invalid regex(1): ' + validRegex.toString() + " : "
-                                                    + val);
                                         return ret;
                                     };
                                 };
@@ -172,7 +169,6 @@
                                     commas = wholeNumbers.replace(new RegExp('(\\d)(?=(\\d{3})+(?!\\d))', 'g'), '$1'
                                             + thouSep);
                                     var ret = "" + commas + decimals;
-                                    window.console.log("Was: " + val + " is now: " + ret);
                                     return ret;
                                 };
                                 return {
