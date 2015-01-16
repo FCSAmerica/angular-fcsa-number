@@ -102,6 +102,9 @@
                                     validRegex = new RegExp(regexString);
                                     return function(val) {
                                         var ret = validRegex.test(val);
+                                        if (!ret) {
+                                        	console.log("Regex invalid: " + validRegex.toString() + "/" + val);
+                                        }
                                         return ret;
                                     };
                                 };
@@ -288,6 +291,14 @@
             var regex = new RegExp("^1(.+)1\\d*$");
             n = n && regex.exec(n);
             n = n ? n[1] : ".";
+            if (n.length == 1) {
+            	var nc = n.charCodeAt(0);
+            	if (nc > 127) {
+            		n = String.fromCharCode(nc - 128);
+            	}
+            } else {
+            	console.log('WARNING: auto detection of decimal separator failed, current: ' + n);
+            }
             return n;
         }
         whatThousandsSeparator = function() {
@@ -296,6 +307,14 @@
             var regex = new RegExp("^1(.+)111(\\" + whatDecimalSeparator() + "\\d*)?$");
             n = n && regex.exec(n);
             n = n ? n[1] : ",";
+            if (n.length == 1) {
+            	var nc = n.charCodeAt(0);
+            	if (nc > 127) {
+            		n = String.fromCharCode(nc - 128);
+            	}
+            } else {
+            	console.log('WARNING: auto detection of thousands separator failed, current: ' + n);
+            }
             return n;
         }
         _defaultOptions = {
