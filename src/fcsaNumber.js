@@ -44,7 +44,7 @@
             if (dsi >= 0 && dsi < val.length - 1) {
                 decimals = decSep + (dsi < val.length ? val.substring(dsi + 1) : "");
             }
-            wholeNumbers = val.replace(new RegExp('(\\.\\d*)$'), '');
+            wholeNumbers = wholeNumbers.replace(/(\-?)(0*)(\d+?)(\.(\d*))?$/, '$1$3$4');
             commas = wholeNumbers.replace(new RegExp('(\\d)(?=(\\d{3})+(?!\\d))', 'g'), '$1' + thSep);
             var ret = "" + commas + decimals;
             return ret;
@@ -67,7 +67,8 @@
                                     if (scope && scope.options != null) {
                                         _ref = scope.$eval(scope.options);
                                         for (option in _ref) {
-                                            if (!__hasProp.call(_ref, option)) continue;
+                                            if (!__hasProp.call(_ref, option))
+                                                continue;
                                             value = _ref[option];
                                             options[option] = value;
                                         }
@@ -102,9 +103,6 @@
                                     validRegex = new RegExp(regexString);
                                     return function(val) {
                                         var ret = validRegex.test(val);
-                                        if (!ret) {
-                                        	console.log("Regex invalid: " + validRegex.toString() + "/" + val);
-                                        }
                                         return ret;
                                     };
                                 };
@@ -124,23 +122,37 @@
                                             return false;
                                         }
                                         var options = getOptions();
-                                        var valS = val.toString();
+                                        var valS = val.toString().trim();
                                         var digits = 0;
                                         var decsep = 0;
+                                        var nonZero = false;
                                         for (var i = 0; i < valS.length; i++) {
                                             var znak = valS[i];
+                                            if (znak == '-') {
+                                                continue;
+                                            }
                                             if (znak >= '0' && znak <= '9') {
-                                                digits++;
+                                                if (!nonZero && znak == '0') {
+                                                    // there were no non-zero
+                                                    // chars
+                                                    if (i < valS.length - 1 && valS[i + 1] != options.decimalSeparator) {
+                                                        continue;
+                                                    }
+                                                } else {
+                                                    nonZero = true;
+                                                    digits++;
+                                                }
                                             } else {
                                                 if (znak == options.thousandsSeparator) {
                                                     continue;
-                                                } else if (znak == options.decimalSeparator) {
-                                                    if (decsep++) {
+                                                } else
+                                                    if (znak == options.decimalSeparator) {
+                                                        if (decsep++) {
+                                                            return digits <= maxDigits;
+                                                        }
+                                                    } else {
                                                         return false;
                                                     }
-                                                } else {
-                                                    return false;
-                                                }
                                             }
                                         }
                                         return digits <= maxDigits;
@@ -194,6 +206,7 @@
                                         decimals = val.substring(dsi);
                                     }
                                     wholeNumbers = val.replace(new RegExp('(\\' + decSep + '\\d*)$'), '');
+                                    wholeNumbers = wholeNumbers.replace(/(\-?)(0*)(\d+?)(\.(\d*))?$/, '$1$3$4');
                                     commas = wholeNumbers.replace(new RegExp('(\\d)(?=(\\d{3})+(?!\\d))', 'g'), '$1'
                                             + thouSep);
                                     var ret = "" + commas + decimals;
@@ -252,22 +265,16 @@
                                         elem.on('focus', function() {
                                             var val;
                                             val = elem.val();
+                                            var options = getOptions();
                                             if (options.prepend != null) {
                                                 val = val.replace(options.prepend, '');
                                             }
                                             if (options.append != null) {
                                                 val = val.replace(options.append, '');
                                             }
-                                            if (!options.keepThousandsOnInput) {
-                                                if (val) {
-                                                    var opt = getOptions();
-                                                    var sval = fcsaHelper.toNumber(val, opt.decimalSeparator,
-                                                            opt.thousandsSeparator);
-                                                    val = Number(sval).toString();
-                                                    val = val.replace(
-                                                            new RegExp("\\" + options.thousandsSeparator, "g"),
-                                                            options.decimalSeparator);
-                                                }
+                                            if (!options.keepThousandsOnInput && val) {
+                                                val = val.replace(new RegExp("\\" + options.thousandsSeparator, "g"),
+                                                        '');
                                             }
                                             elem.val(val);
                                             return elem[0].select();
@@ -292,12 +299,12 @@
             n = n && regex.exec(n);
             n = n ? n[1] : ".";
             if (n.length == 1) {
-            	var nc = n.charCodeAt(0);
-            	if (nc > 127) {
-            		n = String.fromCharCode(nc - 128);
-            	}
+                var nc = n.charCodeAt(0);
+                if (nc > 127) {
+                    n = String.fromCharCode(nc - 128);
+                }
             } else {
-            	console.log('WARNING: auto detection of decimal separator failed, current: ' + n);
+                console.log('WARNING: auto detection of decimal separator failed, current: ' + n);
             }
             return n;
         }
@@ -308,12 +315,12 @@
             n = n && regex.exec(n);
             n = n ? n[1] : ",";
             if (n.length == 1) {
-            	var nc = n.charCodeAt(0);
-            	if (nc > 127) {
-            		n = String.fromCharCode(nc - 128);
-            	}
+                var nc = n.charCodeAt(0);
+                if (nc > 127) {
+                    n = String.fromCharCode(nc - 128);
+                }
             } else {
-            	console.log('WARNING: auto detection of thousands separator failed, current: ' + n);
+                console.log('WARNING: auto detection of thousands separator failed, current: ' + n);
             }
             return n;
         }
