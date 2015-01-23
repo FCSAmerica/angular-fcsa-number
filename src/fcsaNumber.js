@@ -44,6 +44,7 @@
             if (dsi >= 0 && dsi < val.length - 1) {
                 decimals = decSep + (dsi < val.length ? val.substring(dsi + 1) : "");
             }
+            wholeNumbers = val.replace(new RegExp('(\\.\\d*)$'), '');
             wholeNumbers = wholeNumbers.replace(/(\-?)(0*)(\d+?)(\.(\d*))?$/, '$1$3$4');
             commas = wholeNumbers.replace(new RegExp('(\\d)(?=(\\d{3})+(?!\\d))', 'g'), '$1' + thSep);
             var ret = "" + commas + decimals;
