@@ -273,7 +273,7 @@
                                             if (options.append != null) {
                                                 val = val.replace(options.append, '');
                                             }
-                                            if (!options.keepThousandsOnInput && val) {
+                                            if (!options.keepThousandsOnInput && val && isValid(val)) {
                                                 val = val.replace(new RegExp("\\" + options.thousandsSeparator, "g"),
                                                         '');
                                             }
