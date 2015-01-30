@@ -169,7 +169,7 @@
           });
           if (options.preventInvalidInput === true) {
             return elem.on('keypress', function(e) {
-              if (isNotDigit(e.which) && isNotActionKey(e.which) && !e.ctrlKey) {
+              if (isNotDigit(e.which) && isNotActionKey(e.which) && !e.ctrlKey && !e.metaKey) {
                 return e.preventDefault();
               }
             });

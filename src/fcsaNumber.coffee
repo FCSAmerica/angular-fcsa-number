@@ -120,7 +120,7 @@ fcsaNumberModule.directive 'fcsaNumber',
 
             if options.preventInvalidInput == true
               elem.on 'keypress', (e) ->
-                e.preventDefault() if (isNotDigit(e.which) && isNotActionKey(e.which) && !e.ctrlKey)
+                e.preventDefault() if (isNotDigit(e.which) && isNotActionKey(e.which) && !e.ctrlKey && !e.metaKey)
     }
 ]
 
