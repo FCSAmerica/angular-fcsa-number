@@ -19,9 +19,9 @@ fcsaNumberModule.directive 'fcsaNumber',
     isNotDigit = (which) ->
         (which < 44 || which > 57 || which is 47)
 
-    controlKeys = [0,8,13] # 0 = tab, 8 = backspace , 13 = enter
-    isNotControlKey = (which) ->
-      controlKeys.indexOf(which) == -1
+    actionKeys = [0,8,13] # 0 = tab, 8 = backspace , 13 = enter
+    isNotActionKey = (which) ->
+      actionKeys.indexOf(which) == -1
 
     hasMultipleDecimals = (val) ->
       val? && val.toString().split('.').length > 2
@@ -120,7 +120,7 @@ fcsaNumberModule.directive 'fcsaNumber',
 
             if options.preventInvalidInput == true
               elem.on 'keypress', (e) ->
-                e.preventDefault() if isNotDigit(e.which) && isNotControlKey(e.which)
+                e.preventDefault() if (isNotDigit(e.which) && isNotActionKey(e.which) && !e.ctrlKey)
     }
 ]
 
