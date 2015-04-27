@@ -16,13 +16,22 @@
         return expect(input.getAttribute('value')).toBe('1,234.5678');
       });
     });
-    return it('removes the thousand separators on focus', function() {
+    it('removes the thousand separators on focus', function() {
       var input;
       input = element(By.model('amount'));
       input.clear();
       input.sendKeys('1000\t');
       input.click();
       return expect(input.getAttribute('value')).toBe('1000');
+    });
+    return describe('with renderOnKeyup', function() {
+      return it('adds the thousand separators on keydown', function() {
+        var input;
+        input = element(By.id('with-render-on'));
+        input.clear();
+        input.sendKeys('1000');
+        return expect(input.getAttribute('value')).toBe('1,000');
+      });
     });
   });
 

@@ -22,6 +22,26 @@ describe 'fcsaNumber', ->
     $scope.form.number.$setViewValue args.val
     $scope.form.number.$valid
 
+  describe 'with renderOnKeyup', ->
+    describe 'on keyup', ->
+      it 'adds commas', ->
+        $scope.model.number = 1000
+        el = $compile("<input type='text' name='number' ng-model='model.number' fcsa-number=\"{renderOnKeyup: true}\" />")($scope)
+        el = el[0]
+        $scope.$digest()
+        angular.element(document.body).append el
+        angular.element(el).triggerHandler 'focus'
+        expect(el.value).toBe '1000'
+
+        e = new window.KeyboardEvent 'keyup'
+        delete e.keyCode;
+        Object.defineProperty(e, 'keyCode', {'value': 49});
+        el.dispatchEvent(e);
+
+        # 1000 stays 1000 because KeyboardEvent event only triggers the listeners
+        # but does not actually add the character to the input field
+        expect(el.value).toBe '1,000'
+
   describe 'on focus', ->
     it 'removes the commas', ->
       $scope.model.number = 1000
