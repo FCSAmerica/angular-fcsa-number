@@ -17,7 +17,7 @@ fcsaNumberModule.directive 'fcsaNumber',
 
     # 44 is ',', 45 is '-', 57 is '9' and 47 is '/'
     isNotDigit = (which) ->
-        (which < 44 || which > 57 || which is 47)
+        (which < 44 || which > 57 || which is 47) and (which < 96 || which > 105)
 
     controlKeys = [0,8,13] # 0 = tab, 8 = backspace , 13 = enter
     isNotControlKey = (which) ->

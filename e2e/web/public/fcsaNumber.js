@@ -1,4 +1,4 @@
-/*! angular-fcsa-number (version 1.5.3) 2015-04-27 */
+/*! angular-fcsa-number (version 1.5.3) 2015-04-28 */
 (function() {
   var fcsaNumberModule,
     __hasProp = {}.hasOwnProperty;
@@ -26,7 +26,7 @@
         return !isNaN(parseFloat(val)) && isFinite(val);
       };
       isNotDigit = function(which) {
-        return which < 44 || which > 57 || which === 47;
+        return (which < 44 || which > 57 || which === 47) && (which < 96 || which > 105);
       };
       controlKeys = [0, 8, 13];
       isNotControlKey = function(which) {
