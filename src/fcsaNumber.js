@@ -1,4 +1,4 @@
-/*! angular-fcsa-number (version 1.5.3) 2014-10-17 */
+/*! angular-fcsa-number (version 1.5.3) 2015-08-20 */
 (function() {
   var fcsaNumberModule,
     __hasProp = {}.hasOwnProperty;
@@ -7,7 +7,7 @@
 
   fcsaNumberModule.directive('fcsaNumber', [
     'fcsaNumberConfig', function(fcsaNumberConfig) {
-      var addCommasToInteger, controlKeys, defaultOptions, getOptions, hasMultipleDecimals, isNotControlKey, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMaxNumber, makeMinNumber;
+      var addCommasToInteger, controlKeys, defaultOptions, getOptions, hasMultipleDecimals, isNotControlKey, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMaxNumber, makeMinNumber, truncateDecimalDigits;
       defaultOptions = fcsaNumberConfig.defaultOptions;
       getOptions = function(scope) {
         var option, options, value, _ref;
@@ -96,6 +96,11 @@
           return true;
         };
       };
+      truncateDecimalDigits = function(val, maxDecimals) {
+        val = parseFloat(val);
+        val = val.toFixed(maxDecimals);
+        return val.toString();
+      };
       addCommasToInteger = function(val) {
         var commas, decimals, wholeNumbers;
         decimals = val.indexOf('.') == -1 ? '' : val.replace(/^-?\d+(?=\.)/, '');
@@ -116,6 +121,15 @@
           ngModelCtrl.$parsers.unshift(function(viewVal) {
             var noCommasVal;
             noCommasVal = viewVal.replace(/,/g, '');
+            if (options.prepend != null) {
+              noCommasVal = noCommasVal.replace(options.prepend, '');
+            }
+            if (options.append != null) {
+              noCommasVal = noCommasVal.replace(options.append, '');
+            }
+            if (options.truncateDecimals != null) {
+              noCommasVal = truncateDecimalDigits(noCommasVal.toString(), options.maxDecimals);
+            }
             if (isValid(noCommasVal) || !noCommasVal) {
               ngModelCtrl.$setValidity('fcsaNumber', true);
               return noCommasVal;
@@ -132,6 +146,9 @@
               return val;
             }
             ngModelCtrl.$setValidity('fcsaNumber', true);
+            if (options.truncateDecimals != null) {
+              val = truncateDecimalDigits(val.toString(), options.maxDecimals);
+            }
             val = addCommasToInteger(val.toString());
             if (options.prepend != null) {
               val = "" + options.prepend + val;

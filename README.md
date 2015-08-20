@@ -62,6 +62,15 @@ Validates the number does not have more than the specified number of decimals.
  * Valid: 1.23
  * Invalid: 1.234
 
+#### truncateDecimals
+
+If true the number will be truncated down to maxDecimals before validation test of maxDecimals
+
+    fcsa-number="{ maxDecimals: 2, truncateDecimals: true }"
+
+ * Input: 1.233
+ * Output: 1.23
+
 #### maxDigits
 
 Validates the number does not have more than the specified number of digits.
@@ -85,11 +94,15 @@ Prepends the specified text before the number.
 
     fcsa-number="{ prepend: '$' }"
 
+This text is removed prior to validation to support pasted data which contains the prepended text.
+
 #### append
 
 Appends the specified text after the number.
 
     fcsa-number="{ append: '%' }"
+
+This text is removed prior to validation to support pasted data which contains the appended text.
 
 ## Default Options
 
