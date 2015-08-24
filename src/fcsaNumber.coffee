@@ -64,6 +64,7 @@ fcsaNumberModule.directive 'fcsaNumber',
             for i in [0...validations.length]
                 return false unless validations[i] val, number
             true
+
     truncateDecimalDigits = (val, maxDecimals) ->
         val = parseFloat val
         val = val.toFixed maxDecimals
