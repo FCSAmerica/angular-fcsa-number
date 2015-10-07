@@ -105,7 +105,7 @@ app.config(['fcsaNumberConfigProvider', function(fcsaNumberConfigProvider) {
     max: 100,
     min: 0
   });
-});
+}]);
 ```
 
 The default options can be overridden locally by passing in an options object: `fcsa-number="{ max: 10 }"`
