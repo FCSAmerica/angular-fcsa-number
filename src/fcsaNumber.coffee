@@ -64,7 +64,14 @@ fcsaNumberModule.directive 'fcsaNumber',
             for i in [0...validations.length]
                 return false unless validations[i] val, number
             true
-        
+
+    roundNumber = (val, options) ->
+        numberOfDecimals = 0
+        if isNumber(options.roundNumberOfDecimals) && options.roundNumberOfDecimals?
+            numberOfDecimals = parseInt(options.roundNumberOfDecimals)
+        roundVariable = Math.pow(10, numberOfDecimals)
+        Math.round(val * roundVariable) / roundVariable
+
     addCommasToInteger = (val) ->
         decimals = `val.indexOf('.') == -1 ? '' : val.replace(/^-?\d+(?=\.)/, '')`
         wholeNumbers = val.replace /(\.\d+)$/, ''
@@ -94,6 +101,7 @@ fcsaNumberModule.directive 'fcsaNumber',
                     return options.nullDisplay
                 return val if !val? || !isValid val
                 ngModelCtrl.$setValidity 'fcsaNumber', true
+                val = roundNumber val.toString(), options
                 val = addCommasToInteger val.toString()
                 if options.prepend?
                   val = "#{options.prepend}#{val}"
