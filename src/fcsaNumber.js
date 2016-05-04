@@ -143,6 +143,11 @@
               return options.nullDisplay;
             }
             if ((val == null) || !isValid(val)) {
+              
+              if(val == null){
+                ngModelCtrl.$setValidity('fcsaNumber', true);
+              }
+              
               return val;
             }
             ngModelCtrl.$setValidity('fcsaNumber', true);
@@ -162,6 +167,9 @@
             var formatter, viewValue, _i, _len, _ref;
             viewValue = ngModelCtrl.$modelValue;
             if ((viewValue == null) || !isValid(viewValue)) {
+              if(viewValue == null){
+                ngModelCtrl.$setValidity('fcsaNumber', true);
+              }
               return;
             }
             _ref = ngModelCtrl.$formatters;
@@ -170,6 +178,7 @@
               viewValue = formatter(viewValue);
             }
             ngModelCtrl.$viewValue = viewValue;
+
             return ngModelCtrl.$render();
           });
           elem.on('focus', function() {

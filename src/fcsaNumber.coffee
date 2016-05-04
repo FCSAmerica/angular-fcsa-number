@@ -106,7 +106,12 @@ fcsaNumberModule.directive 'fcsaNumber',
             ngModelCtrl.$formatters.push (val) ->
                 if options.nullDisplay? && (!val || val == '')
                     return options.nullDisplay
-                return val if !val? || !isValid val
+
+                if viewValue == null or !isValid(viewValue)
+                    if viewValue == null
+                        ngModelCtrl.$setValidity 'fcsaNumber', true
+                    return
+
                 ngModelCtrl.$setValidity 'fcsaNumber', true
 
                 if options.truncateDecimals?
@@ -121,7 +126,10 @@ fcsaNumberModule.directive 'fcsaNumber',
 
             elem.on 'blur', ->
                 viewValue = ngModelCtrl.$modelValue
-                return if !viewValue? || !isValid(viewValue)
+                if viewValue == null or !isValid(viewValue)
+                    if viewValue == null
+                        ngModelCtrl.$setValidity 'fcsaNumber', true
+                    return
                 for formatter in ngModelCtrl.$formatters
                     viewValue = formatter(viewValue)
                 ngModelCtrl.$viewValue = viewValue
