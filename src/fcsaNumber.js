@@ -7,7 +7,7 @@
 
   fcsaNumberModule.directive('fcsaNumber', [
     'fcsaNumberConfig', function(fcsaNumberConfig) {
-      var addCommasToInteger, controlKeys, defaultOptions, getOptions, hasMultipleDecimals, isNotControlKey, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMaxNumber, makeMinNumber;
+      var addCommasToInteger, controlKeys, defaultOptions, getOptions, hasMultipleDecimals, isNotControlKey, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMinDigits, makeMaxNumber, makeMinNumber;
       defaultOptions = fcsaNumberConfig.defaultOptions;
       getOptions = function(scope) {
         var option, options, value, _ref;
@@ -64,6 +64,13 @@
           return validRegex.test(val);
         };
       };
+      makeMinDigits = function(minDigits) {
+        var validRegex;
+        validRegex = new RegExp("^\\d{" + minDigits + ",}(\\d*)$");
+        return function(val) {
+          return validRegex.test(val);
+        };
+      };
       makeIsValid = function(options) {
         var validations;
         validations = [];
@@ -78,6 +85,9 @@
         }
         if (options.maxDigits != null) {
           validations.push(makeMaxDigits(options.maxDigits));
+        }
+        if (options.minDigits != null) {
+          validations.push(makeMinDigits(options.minDigits));
         }
         return function(val) {
           var i, number, _i, _ref;
