@@ -132,6 +132,7 @@
               return val;
             }
             ngModelCtrl.$setValidity('fcsaNumber', true);
+            val = parseFloat(val).toFixed(2);
             val = addCommasToInteger(val.toString());
             if (options.prepend != null) {
               val = "" + options.prepend + val;
@@ -157,7 +158,7 @@
           });
           elem.on('focus', function() {
             var val;
-            val = elem.val();
+            val = ngModelCtrl.$modelValue.toString();
             if (options.prepend != null) {
               val = val.replace(options.prepend, '');
             }
