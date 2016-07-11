@@ -1,4 +1,5 @@
 /*! angular-fcsa-number (version 1.5.3) 2014-10-17 */
+/* modified to add min-decimals option for formatting */
 (function() {
   var fcsaNumberModule,
     __hasProp = {}.hasOwnProperty;
@@ -7,7 +8,7 @@
 
   fcsaNumberModule.directive('fcsaNumber', [
     'fcsaNumberConfig', function(fcsaNumberConfig) {
-      var addCommasToInteger, controlKeys, defaultOptions, getOptions, hasMultipleDecimals, isNotControlKey, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMaxNumber, makeMinNumber;
+        var addCommasToInteger, controlKeys, defaultOptions, getOptions, hasMultipleDecimals, isNotControlKey, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMaxNumber, makeMinNumber;
       defaultOptions = fcsaNumberConfig.defaultOptions;
       getOptions = function(scope) {
         var option, options, value, _ref;
@@ -47,7 +48,7 @@
           return validRegex.test(val);
         };
       };
-      makeMaxNumber = function(maxNumber) {
+      makeMaxNumber = function (maxNumber) {
         return function(val, number) {
           return number <= maxNumber;
         };
@@ -132,6 +133,10 @@
               return val;
             }
             ngModelCtrl.$setValidity('fcsaNumber', true);
+            if (options.displayMinDecimals != null) {
+                //format number to have at least displayMinDecimals
+                val = Number(val).toFixed(Math.max(options.displayMinDecimals, (val.toString().split('.')[1] || []).length));
+            }
             val = addCommasToInteger(val.toString());
             if (options.prepend != null) {
               val = "" + options.prepend + val;
