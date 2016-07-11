@@ -1,4 +1,4 @@
-/*! angular-fcsa-number (version 1.5.3) 2014-10-17 */
+/*! angular-fcsa-number (version 1.5.3) 2015-01-30 */
 (function() {
   var fcsaNumberModule,
     __hasProp = {}.hasOwnProperty;
@@ -7,7 +7,7 @@
 
   fcsaNumberModule.directive('fcsaNumber', [
     'fcsaNumberConfig', function(fcsaNumberConfig) {
-      var addCommasToInteger, controlKeys, defaultOptions, getOptions, hasMultipleDecimals, isNotControlKey, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMaxNumber, makeMinNumber;
+      var actionKeys, addCommasToInteger, defaultOptions, getOptions, hasMultipleDecimals, isNotActionKey, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMaxNumber, makeMinNumber;
       defaultOptions = fcsaNumberConfig.defaultOptions;
       getOptions = function(scope) {
         var option, options, value, _ref;
@@ -28,9 +28,9 @@
       isNotDigit = function(which) {
         return which < 44 || which > 57 || which === 47;
       };
-      controlKeys = [0, 8, 13];
-      isNotControlKey = function(which) {
-        return controlKeys.indexOf(which) === -1;
+      actionKeys = [0, 8, 13];
+      isNotActionKey = function(which) {
+        return actionKeys.indexOf(which) === -1;
       };
       hasMultipleDecimals = function(val) {
         return (val != null) && val.toString().split('.').length > 2;
@@ -169,7 +169,7 @@
           });
           if (options.preventInvalidInput === true) {
             return elem.on('keypress', function(e) {
-              if (isNotDigit(e.which) && isNotControlKey(e.which)) {
+              if (isNotDigit(e.which) && isNotActionKey(e.which) && !e.ctrlKey && !e.metaKey) {
                 return e.preventDefault();
               }
             });
