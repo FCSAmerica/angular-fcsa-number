@@ -1,4 +1,4 @@
-/*! angular-fcsa-number (version 1.5.3) 2014-10-17 */
+/*! angular-fcsa-number (version 1.5.3) 2015-10-23 */
 (function() {
   var fcsaNumberModule,
     __hasProp = {}.hasOwnProperty;
@@ -7,7 +7,7 @@
 
   fcsaNumberModule.directive('fcsaNumber', [
     'fcsaNumberConfig', function(fcsaNumberConfig) {
-      var addCommasToInteger, controlKeys, defaultOptions, getOptions, hasMultipleDecimals, isNotControlKey, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMaxNumber, makeMinNumber;
+      var addCommasToInteger, controlKeys, defaultOptions, getOptions, hasMultipleDecimals, isNotControlKey, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMaxNumber, makeMinNumber, roundNumber;
       defaultOptions = fcsaNumberConfig.defaultOptions;
       getOptions = function(scope) {
         var option, options, value, _ref;
@@ -96,6 +96,15 @@
           return true;
         };
       };
+      roundNumber = function(val, options) {
+        var numberOfDecimals, roundVariable;
+        numberOfDecimals = 0;
+        if (isNumber(options.roundNumberOfDecimals) && (options.roundNumberOfDecimals != null)) {
+          numberOfDecimals = parseInt(options.roundNumberOfDecimals);
+        }
+        roundVariable = Math.pow(10, numberOfDecimals);
+        return Math.round(val * roundVariable) / roundVariable;
+      };
       addCommasToInteger = function(val) {
         var commas, decimals, wholeNumbers;
         decimals = val.indexOf('.') == -1 ? '' : val.replace(/^-?\d+(?=\.)/, '');
@@ -132,6 +141,7 @@
               return val;
             }
             ngModelCtrl.$setValidity('fcsaNumber', true);
+            val = roundNumber(val.toString(), options);
             val = addCommasToInteger(val.toString());
             if (options.prepend != null) {
               val = "" + options.prepend + val;
