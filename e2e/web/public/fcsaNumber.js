@@ -1,4 +1,4 @@
-/*! angular-fcsa-number (version 1.5.3) 2014-10-17 */
+/*! angular-fcsa-number (version 1.5.3) 2015-04-28 */
 (function() {
   var fcsaNumberModule,
     __hasProp = {}.hasOwnProperty;
@@ -26,7 +26,7 @@
         return !isNaN(parseFloat(val)) && isFinite(val);
       };
       isNotDigit = function(which) {
-        return which < 44 || which > 57 || which === 47;
+        return (which < 44 || which > 57 || which === 47) && (which < 96 || which > 105);
       };
       controlKeys = [0, 8, 13];
       isNotControlKey = function(which) {
@@ -110,9 +110,27 @@
           options: '@fcsaNumber'
         },
         link: function(scope, elem, attrs, ngModelCtrl) {
-          var isValid, options;
+          var isValid, options, renderViewValue;
           options = getOptions(scope);
           isValid = makeIsValid(options);
+          renderViewValue = function(e) {
+            var formatter, keyCode, viewValue, _i, _len, _ref;
+            keyCode = e.keyCode;
+            if (keyCode && isNotDigit(keyCode)) {
+              return;
+            }
+            viewValue = ngModelCtrl.$modelValue;
+            if ((viewValue == null) || !isValid(viewValue)) {
+              return;
+            }
+            _ref = ngModelCtrl.$formatters;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              formatter = _ref[_i];
+              viewValue = formatter(viewValue);
+            }
+            ngModelCtrl.$viewValue = viewValue;
+            return ngModelCtrl.$render();
+          };
           ngModelCtrl.$parsers.unshift(function(viewVal) {
             var noCommasVal;
             noCommasVal = viewVal.replace(/,/g, '');
@@ -141,20 +159,10 @@
             }
             return val;
           });
-          elem.on('blur', function() {
-            var formatter, viewValue, _i, _len, _ref;
-            viewValue = ngModelCtrl.$modelValue;
-            if ((viewValue == null) || !isValid(viewValue)) {
-              return;
-            }
-            _ref = ngModelCtrl.$formatters;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              formatter = _ref[_i];
-              viewValue = formatter(viewValue);
-            }
-            ngModelCtrl.$viewValue = viewValue;
-            return ngModelCtrl.$render();
-          });
+          if (options.renderOnKeyup) {
+            elem.on('keyup', renderViewValue);
+          }
+          elem.on('blur', renderViewValue);
           elem.on('focus', function() {
             var val;
             val = elem.val();

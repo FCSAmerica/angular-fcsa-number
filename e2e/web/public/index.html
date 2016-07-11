@@ -12,5 +12,7 @@
   </head>
   <body ng-app='app' ng-controller='HomeController'>
     <input type='text' ng-model='amount' fcsa-number />
+
+    <input type='text' id='with-render-on' ng-model='amount2' fcsa-number='{renderOnKeyup: "keyup"}' />
   </body>
 </html>

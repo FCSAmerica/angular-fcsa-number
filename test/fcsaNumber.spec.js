@@ -27,6 +27,44 @@
       $scope.form.number.$setViewValue(args.val);
       return $scope.form.number.$valid;
     };
+    describe('with renderOnKeyup', function() {
+      return describe('on keyup', function() {
+        it('adds commas', function() {
+          var e, el;
+          $scope.model.number = 1000;
+          el = $compile("<input type='text' name='number' ng-model='model.number' fcsa-number=\"{renderOnKeyup: true}\" />")($scope);
+          el = el[0];
+          $scope.$digest();
+          angular.element(document.body).append(el);
+          angular.element(el).triggerHandler('focus');
+          expect(el.value).toBe('1000');
+          e = new window.KeyboardEvent('keyup');
+          delete e.keyCode;
+          Object.defineProperty(e, 'keyCode', {
+            'value': 49
+          });
+          el.dispatchEvent(e);
+          return expect(el.value).toBe('1,000');
+        });
+        return it('retains proper model value', function() {
+          var e, el;
+          $scope.model.number = 1000;
+          el = $compile("<input type='text' name='number' ng-model='model.number' fcsa-number=\"{renderOnKeyup: true}\" />")($scope);
+          el = el[0];
+          $scope.$digest();
+          angular.element(document.body).append(el);
+          angular.element(el).triggerHandler('focus');
+          expect(el.value).toBe('1000');
+          e = new window.KeyboardEvent('keyup');
+          delete e.keyCode;
+          Object.defineProperty(e, 'keyCode', {
+            'value': 49
+          });
+          el.dispatchEvent(e);
+          return expect($scope.model.number).toBe(1000);
+        });
+      });
+    });
     describe('on focus', function() {
       return it('removes the commas', function() {
         var el;

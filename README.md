@@ -1,6 +1,6 @@
 # FCSA Number
 
-An Angular directive that validates numbers and adds commas for the thousands separator. 
+An Angular directive that validates numbers and adds commas for the thousands separator.
 
 So when the user enters `1000` into a textbox and tabs out, the value will be formatted to include the thousands separator and display: `1,000`
 
@@ -21,7 +21,7 @@ Copy `src/fcsaNumber.js` into your project and reference it.
 ## Quick Start
 
 Add the `fcsa-number` module as a dependency to you Angular app.
- 
+
     angular.module('yourApp', ['fcsa-number']);
 
 Add the `fcsa-number` attribute to textboxes you want to have validated and formatted with thousands separators.
@@ -73,7 +73,7 @@ Validates the number does not have more than the specified number of digits.
 
 #### preventInvalidInput
 
-By default users are allowed to enter invalid characters, and then the textbox is marked invalid. 
+By default users are allowed to enter invalid characters, and then the textbox is marked invalid.
 If you want to prevent users from entering invalid characters altogether, then use the `preventInvalidInput` option.
 If the user presses the 'a' key, the directive will catch it and prevent 'a' from being shown in the textbox.
 
@@ -91,9 +91,15 @@ Appends the specified text after the number.
 
     fcsa-number="{ append: '%' }"
 
+#### renderOnKeyup
+
+    Runs on every keyup event, instead of just when leaving the input.
+
+        fcsa-number="{ renderOnKeyup: true }"
+
 ## Default Options
 
-It's possible to set the options globally too. You do this by calling `fcsaNumberConfigProvider.setDefaultOptions()` 
+It's possible to set the options globally too. You do this by calling `fcsaNumberConfigProvider.setDefaultOptions()`
 inside a config function in your app.
 
 Here's a code example that sets the default options:

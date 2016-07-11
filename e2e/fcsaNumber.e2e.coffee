@@ -20,3 +20,12 @@ describe 'fcsaNumber', ->
     input.click()
 
     expect(input.getAttribute('value')).toBe '1000'
+
+  describe 'with renderOnKeyup', ->
+    it 'adds the thousand separators on keydown', ->
+      input = element(By.id('with-render-on'))
+      input.clear()
+      input.sendKeys '1000'
+
+      expect(input.getAttribute('value')).toBe '1,000'
+
