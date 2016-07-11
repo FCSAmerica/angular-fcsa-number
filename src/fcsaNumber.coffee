@@ -64,7 +64,12 @@ fcsaNumberModule.directive 'fcsaNumber',
             for i in [0...validations.length]
                 return false unless validations[i] val, number
             true
-        
+
+    truncateDecimalDigits = (val, maxDecimals) ->
+        val = parseFloat val
+        val = val.toFixed maxDecimals
+        val.toString()
+
     addCommasToInteger = (val) ->
         decimals = `val.indexOf('.') == -1 ? '' : val.replace(/^-?\d+(?=\.)/, '')`
         wholeNumbers = val.replace /(\.\d+)$/, ''
@@ -82,6 +87,15 @@ fcsaNumberModule.directive 'fcsaNumber',
 
             ngModelCtrl.$parsers.unshift (viewVal) ->
                 noCommasVal = viewVal.replace /,/g, ''
+                if options.prepend?
+                    noCommasVal = noCommasVal.replace options.prepend, ''
+
+                if options.append?
+                    noCommasVal = noCommasVal.replace options.append, ''
+                
+                if options.truncateDecimals?
+                    noCommasVal = truncateDecimalDigits noCommasVal.toString(), options.maxDecimals
+                
                 if isValid(noCommasVal) || !noCommasVal
                     ngModelCtrl.$setValidity 'fcsaNumber', true
                     return noCommasVal
@@ -92,8 +106,17 @@ fcsaNumberModule.directive 'fcsaNumber',
             ngModelCtrl.$formatters.push (val) ->
                 if options.nullDisplay? && (!val || val == '')
                     return options.nullDisplay
-                return val if !val? || !isValid val
+
+                if viewValue == null or !isValid(viewValue)
+                    if viewValue == null
+                        ngModelCtrl.$setValidity 'fcsaNumber', true
+                    return
+
                 ngModelCtrl.$setValidity 'fcsaNumber', true
+
+                if options.truncateDecimals?
+                    val = truncateDecimalDigits val.toString(), options.maxDecimals
+
                 val = addCommasToInteger val.toString()
                 if options.prepend?
                   val = "#{options.prepend}#{val}"
@@ -103,7 +126,10 @@ fcsaNumberModule.directive 'fcsaNumber',
 
             elem.on 'blur', ->
                 viewValue = ngModelCtrl.$modelValue
-                return if !viewValue? || !isValid(viewValue)
+                if viewValue == null or !isValid(viewValue)
+                    if viewValue == null
+                        ngModelCtrl.$setValidity 'fcsaNumber', true
+                    return
                 for formatter in ngModelCtrl.$formatters
                     viewValue = formatter(viewValue)
                 ngModelCtrl.$viewValue = viewValue
