@@ -1,4 +1,4 @@
-/*! angular-fcsa-number (version 1.5.3) 2014-10-17 */
+/*! angular-fcsa-number (version 1.6.0) 2018-03-12 */
 (function() {
   var fcsaNumberModule,
     __hasProp = {}.hasOwnProperty;
@@ -6,9 +6,15 @@
   fcsaNumberModule = angular.module('fcsa-number', []);
 
   fcsaNumberModule.directive('fcsaNumber', [
-    'fcsaNumberConfig', function(fcsaNumberConfig) {
-      var addCommasToInteger, controlKeys, defaultOptions, getOptions, hasMultipleDecimals, isNotControlKey, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMaxNumber, makeMinNumber;
+    'fcsaNumberConfig', '$locale', function(fcsaNumberConfig, $locale) {
+      var addGroupsToInteger, controlKeys, convertToEnglishNumber, decimalSeparator, defaultOptions, getOptions, hasMultipleDecimals, isNotControlKey, isNotDigit, isNumber, makeIsValid, makeMaxDecimals, makeMaxDigits, makeMaxNumber, makeMinNumber, thousandSeparator;
       defaultOptions = fcsaNumberConfig.defaultOptions;
+      decimalSeparator = function() {
+        return $locale.NUMBER_FORMATS.DECIMAL_SEP;
+      };
+      thousandSeparator = function() {
+        return $locale.NUMBER_FORMATS.GROUP_SEP;
+      };
       getOptions = function(scope) {
         var option, options, value, _ref;
         options = angular.copy(defaultOptions);
@@ -22,10 +28,33 @@
         }
         return options;
       };
+      convertToEnglishNumber = function(val) {
+        var decRegEx, thouRegEx;
+        decRegEx = new RegExp("\\" + decimalSeparator(), 'g');
+        thouRegEx = new RegExp("\\" + thousandSeparator(), 'g');
+        val = val.replace(thouRegEx, '');
+        val = val.replace(decRegEx, '.');
+        return val;
+      };
       isNumber = function(val) {
         return !isNaN(parseFloat(val)) && isFinite(val);
       };
-      isNotDigit = function(which) {
+      isNotDigit = function(which, maxDecimals, minVal) {
+        var decSep, thouSep;
+        decSep = decimalSeparator().charCodeAt(0);
+        thouSep = thousandSeparator().charCodeAt(0);
+        if (which === thouSep) {
+          return true;
+        }
+        if (which === decSep) {
+          if (maxDecimals === 0) {
+            return true;
+          }
+          return false;
+        }
+        if (which === 45 && minVal >= 0) {
+          return true;
+        }
         return which < 44 || which > 57 || which === 47;
       };
       controlKeys = [0, 8, 13];
@@ -96,12 +125,17 @@
           return true;
         };
       };
-      addCommasToInteger = function(val) {
-        var commas, decimals, wholeNumbers;
-        decimals = val.indexOf('.') == -1 ? '' : val.replace(/^-?\d+(?=\.)/, '');
-        wholeNumbers = val.replace(/(\.\d+)$/, '');
-        commas = wholeNumbers.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-        return "" + commas + decimals;
+      addGroupsToInteger = function(val) {
+        var decLoc, decSep, decimals, groups, thouSep, wholeNumbers;
+        decSep = decimalSeparator();
+        thouSep = thousandSeparator();
+        val = val.replace(/\./g, decSep);
+        decLoc = val.indexOf(decSep);
+        decimals = decLoc == -1 ? '' : val.substring(decLoc);
+        decLoc = decLoc > -1 ? decLoc : val.length;
+        wholeNumbers = val.substring(0, decLoc);
+        groups = wholeNumbers.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + thouSep);
+        return "" + groups + decimals;
       };
       return {
         restrict: 'A',
@@ -114,11 +148,11 @@
           options = getOptions(scope);
           isValid = makeIsValid(options);
           ngModelCtrl.$parsers.unshift(function(viewVal) {
-            var noCommasVal;
-            noCommasVal = viewVal.replace(/,/g, '');
-            if (isValid(noCommasVal) || !noCommasVal) {
+            var englishNumber;
+            englishNumber = convertToEnglishNumber(viewVal);
+            if (isValid(englishNumber) || !englishNumber) {
               ngModelCtrl.$setValidity('fcsaNumber', true);
-              return noCommasVal;
+              return englishNumber;
             } else {
               ngModelCtrl.$setValidity('fcsaNumber', false);
               return void 0;
@@ -132,7 +166,7 @@
               return val;
             }
             ngModelCtrl.$setValidity('fcsaNumber', true);
-            val = addCommasToInteger(val.toString());
+            val = addGroupsToInteger(val.toString());
             if (options.prepend != null) {
               val = "" + options.prepend + val;
             }
@@ -156,7 +190,7 @@
             return ngModelCtrl.$render();
           });
           elem.on('focus', function() {
-            var val;
+            var thouPattern, val;
             val = elem.val();
             if (options.prepend != null) {
               val = val.replace(options.prepend, '');
@@ -164,12 +198,13 @@
             if (options.append != null) {
               val = val.replace(options.append, '');
             }
-            elem.val(val.replace(/,/g, ''));
+            thouPattern = new RegExp("\\" + thousandSeparator(), 'g');
+            elem.val(val.replace(thouPattern, ''));
             return elem[0].select();
           });
           if (options.preventInvalidInput === true) {
             return elem.on('keypress', function(e) {
-              if (isNotDigit(e.which) && isNotControlKey(e.which)) {
+              if (isNotDigit(e.which, options.maxDecimals, options.min) && isNotControlKey(e.which)) {
                 return e.preventDefault();
               }
             });

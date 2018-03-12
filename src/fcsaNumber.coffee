@@ -1,10 +1,11 @@
 fcsaNumberModule = angular.module('fcsa-number', [])
 
 fcsaNumberModule.directive 'fcsaNumber',
-['fcsaNumberConfig', (fcsaNumberConfig) ->
+['fcsaNumberConfig', '$locale', (fcsaNumberConfig, $locale) ->
 
     defaultOptions = fcsaNumberConfig.defaultOptions
-
+    decimalSeparator = () -> $locale.NUMBER_FORMATS.DECIMAL_SEP
+    thousandSeparator = () -> $locale.NUMBER_FORMATS.GROUP_SEP
     getOptions = (scope) ->
         options = angular.copy defaultOptions
         if scope.options?
@@ -12,13 +13,31 @@ fcsaNumberModule.directive 'fcsaNumber',
                 options[option] = value
         options
     
+    convertToEnglishNumber = (val) ->
+          decRegEx = new RegExp("\\" + decimalSeparator(), 'g')
+          thouRegEx = new RegExp("\\" + thousandSeparator(), 'g')
+          val = val.replace(thouRegEx, '')
+          val = val.replace(decRegEx, '.')
+          val;
+
     isNumber = (val) ->
         !isNaN(parseFloat(val)) && isFinite(val)
 
     # 44 is ',', 45 is '-', 57 is '9' and 47 is '/'
-    isNotDigit = (which) ->
-        (which < 44 || which > 57 || which is 47)
+    isNotDigit = (which, maxDecimals, minVal) ->
+          decSep = decimalSeparator().charCodeAt(0);
+          thouSep = thousandSeparator().charCodeAt(0);
+          if (which == thouSep) # disable input of thousand separators
+            return true
+          if (which == decSep)
+            if (maxDecimals == 0)
+                return true
+            return false
+          if (which == 45 && minVal >= 0)
+            return true
 
+          return (which < 44 || which > 57 || which == 47);
+      
     controlKeys = [0,8,13] # 0 = tab, 8 = backspace , 13 = enter
     isNotControlKey = (which) ->
       controlKeys.indexOf(which) == -1
@@ -64,13 +83,17 @@ fcsaNumberModule.directive 'fcsaNumber',
             for i in [0...validations.length]
                 return false unless validations[i] val, number
             true
-        
-    addCommasToInteger = (val) ->
-        decimals = `val.indexOf('.') == -1 ? '' : val.replace(/^-?\d+(?=\.)/, '')`
-        wholeNumbers = val.replace /(\.\d+)$/, ''
-        commas = wholeNumbers.replace /(\d)(?=(\d{3})+(?!\d))/g, '$1,'
-        "#{commas}#{decimals}"
 
+    addGroupsToInteger = (val) ->
+        decSep = decimalSeparator()
+        thouSep = thousandSeparator()
+        val = val.replace(/\./g, decSep)
+        decLoc = val.indexOf(decSep)
+        decimals = `decLoc == -1 ? '' : val.substring(decLoc)`
+        decLoc = `decLoc > -1 ? decLoc : val.length`
+        wholeNumbers = val.substring(0, decLoc)
+        groups = wholeNumbers.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + thouSep)
+        "#{groups}#{decimals}"
     {
         restrict: 'A'
         require: 'ngModel'
@@ -81,10 +104,10 @@ fcsaNumberModule.directive 'fcsaNumber',
             isValid = makeIsValid options
 
             ngModelCtrl.$parsers.unshift (viewVal) ->
-                noCommasVal = viewVal.replace /,/g, ''
-                if isValid(noCommasVal) || !noCommasVal
+                englishNumber = convertToEnglishNumber(viewVal)
+                if isValid(englishNumber) || !englishNumber
                     ngModelCtrl.$setValidity 'fcsaNumber', true
-                    return noCommasVal
+                    return englishNumber
                 else
                     ngModelCtrl.$setValidity 'fcsaNumber', false
                     return undefined
@@ -94,7 +117,7 @@ fcsaNumberModule.directive 'fcsaNumber',
                     return options.nullDisplay
                 return val if !val? || !isValid val
                 ngModelCtrl.$setValidity 'fcsaNumber', true
-                val = addCommasToInteger val.toString()
+                val = addGroupsToInteger val.toString()
                 if options.prepend?
                   val = "#{options.prepend}#{val}"
                 if options.append?
@@ -115,12 +138,13 @@ fcsaNumberModule.directive 'fcsaNumber',
                   val = val.replace options.prepend, ''
                 if options.append?
                   val = val.replace options.append, ''
-                elem.val val.replace /,/g, ''
+                thouPattern = new RegExp("\\" + thousandSeparator(), 'g')
+                elem.val(val.replace(thouPattern, ''))
                 elem[0].select()
 
             if options.preventInvalidInput == true
               elem.on 'keypress', (e) ->
-                e.preventDefault() if isNotDigit(e.which) && isNotControlKey(e.which)
+                e.preventDefault() if isNotDigit(e.which, options.maxDecimals, options.min) && isNotControlKey(e.which)
     }
 ]
 
