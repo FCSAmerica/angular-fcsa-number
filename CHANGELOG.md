@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.6.0
+
+* Enhancements
+  * Input will be formatted according to the angular locale in use. e.g. if using Spanish decimals will use the "," character and groups will use the "." character.
+
 ### 1.5.3
 
 * Bug Fixes
